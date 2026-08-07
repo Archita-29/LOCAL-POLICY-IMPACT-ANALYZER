@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import feedparser
 import sqlite3
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 RSS_FEEDS = {
     "BBC Hindi": "https://feeds.bbci.co.uk/hindi/rss.xml",
     "Google News - Govt Scheme (Hindi)": "https://news.google.com/rss/search?q=sarkari+yojana&hl=hi&gl=IN&ceid=IN:hi",
@@ -97,7 +97,7 @@ def fetch_and_store(conn):
                     (id, source, title, summary, link, published, language, scraped_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """, (record_id, source_name, title, summary, link, published,
-                      lang, datetime.utcnow().isoformat()))
+                      lang, datetime.now(timezone.utc).isoformat()))
                 new_count += 1
             except sqlite3.IntegrityError:
                 # This ID already exists -> exact duplicate, skip it

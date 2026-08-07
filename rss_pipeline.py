@@ -1,4 +1,5 @@
 print("SCRIPT STARTED")
+from bs4 import BeautifulSoup
 import feedparser
 import sqlite3
 import hashlib
@@ -56,10 +57,10 @@ def detect_language(text):
  
     return "english"
 def clean_text(text):
-    """Basic cleaning: strip whitespace, collapse newlines. Expand this later
-    (e.g. strip HTML tags if a feed's summary field contains markup)."""
+    """Cleaning: strip HTML tags first, then whitespace, collapse newlines."""
     if not text:
         return ""
+    text = BeautifulSoup(text, "html.parser").get_text()
     return " ".join(text.split())
  
  

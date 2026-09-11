@@ -8,6 +8,7 @@ RSS_FEEDS = {
     "BBC Hindi": "https://feeds.bbci.co.uk/hindi/rss.xml",
     "Google News - Govt Scheme (Hindi)": "https://news.google.com/rss/search?q=sarkari+yojana&hl=hi&gl=IN&ceid=IN:hi",
     "Google News - Govt Scheme (English)": "https://news.google.com/rss/search?q=government+scheme+india&hl=en-IN&gl=IN&ceid=IN:en",
+    "PIB via Google News": "https://news.google.com/rss/search?q=site:pib.gov.in&hl=en-IN&gl=IN&ceid=IN:en",
 }
  
 DB_PATH = "policy_data.db"

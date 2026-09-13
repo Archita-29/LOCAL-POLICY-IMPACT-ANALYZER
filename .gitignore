@@ -1,0 +1,5 @@
+.venv/
+policy_data.db
+tempCodeRunnerFile.python
+__pycache__/
+*.pyc

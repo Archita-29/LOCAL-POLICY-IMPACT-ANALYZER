@@ -15,7 +15,11 @@ WHAT THIS DOES (your "Data Integration" role):
      tags so you can mention this in your presentation as a known limitation.
   4. Does near-duplicate detection on titles (catches near-identical articles from
      different feeds that Antra's exact-hash dedup would miss).
-  5. Produces a final clean, merged table (cleaned_records) + CSV export that the
+  5. Filters out records that aren't actually about government policy/schemes.
+     (The BBC Hindi feed pulls ALL news, not just policy news, so general items
+     like sports/entertainment/international news slip in. This step keeps only
+     records whose title+summary contain a policy/scheme-related keyword.)
+  6. Produces a final clean, merged table (cleaned_records) + CSV export that the
      model/backend teammate can use directly.
 
 HOW TO RUN:
@@ -135,6 +139,82 @@ def remove_near_duplicates(records):
 
 
 # ---------------------------------------------------------------------------
+# STEP 5b: Relevance filtering (drop general/off-topic news)
+# ---------------------------------------------------------------------------
+# Keywords in English, Hindi, and common Hinglish spellings that indicate a
+# record is actually about a government policy/scheme, not just general news.
+POLICY_KEYWORDS_EN = [
+    # core policy/government terms
+    "scheme", "yojana", "policy", "government", "govt", "ministry", "cabinet",
+    "subsidy", "welfare", "pension", "ration", "aadhaar", "pib", "parliament",
+    "budget", "tax", "reform", "act", "bill", "notification", "circular",
+    "regulation", "grant", "fund", "compensation", "eligibility", "beneficiary",
+    "collectorate", "district magistrate", "panchayat", "municipal",
+    # agriculture
+    "farmer", "kisan", "crop", "msp", "agriculture", "irrigation",
+    # health
+    "health scheme", "hospital scheme", "ayushman", "insurance scheme",
+    "vaccination", "healthcare policy",
+    # education
+    "scholarship", "education policy", "school scheme", "skill development",
+    # employment / labour
+    "employment scheme", "mgnrega", "labour", "epfo", "esic", "wage",
+    # housing / infrastructure
+    "awas yojana", "housing scheme", "highway project", "infrastructure project",
+    "smart city",
+    # elections / administration
+    "election commission", "voter list", "special intensive revision", "evm",
+    "sir revision",
+]
+POLICY_KEYWORDS_HI = [
+    "योजना", "सरकार", "मंत्रालय", "कैबिनेट", "सब्सिडी", "बजट", "कर",
+    "अधिनियम", "विधेयक", "अधिसूचना", "पेंशन", "राशन", "आधार", "संसद",
+    "कलेक्ट्रेट", "जिलाधिकारी", "पंचायत", "नगर निगम",
+    "किसान", "फसल", "कृषि", "सिंचाई",
+    "स्वास्थ्य", "अस्पताल", "आयुष्मान", "बीमा", "टीकाकरण",
+    "छात्रवृत्ति", "शिक्षा नीति", "कौशल विकास",
+    "रोजगार", "मनरेगा", "मजदूरी",
+    "आवास योजना", "राजमार्ग", "स्मार्ट सिटी",
+    "मतदाता", "चुनाव आयोग", "एसआईआर",
+    "आयुष", "सड़क", "सड़कें", "नदी", "नदियों", "गंगा", "जल शक्ति", "पर्यावरण",
+]
+
+def is_policy_relevant(source, title, summary):
+    """
+    Decides whether to KEEP a record.
+
+    IMPORTANT DESIGN CHOICE:
+    Only Antra's "BBC Hindi" source is a general news feed (it returns ALL
+    BBC Hindi news, not just policy news) -- that's where noise like
+    Princess Diana auctions, Apple launches, and Pakistan/Iran/Saudi Arabia
+    foreign-affairs stories comes from.
+
+    The other sources (Google News - Govt Scheme searches, PIB via Google
+    News) are already topic-targeted BY THEIR SEARCH QUERY (e.g. "sarkari
+    yojana", "government scheme india", "site:pib.gov.in") -- so they don't
+    need keyword filtering, and applying it to them was actually WRONG:
+    it wrongly dropped genuinely relevant records like "NEP 2020", "PM lays
+    foundation stone...", food processing and electrification scheme news,
+    simply because they didn't happen to contain one of our listed keywords.
+    Indian government scheme vocabulary is too vast to list exhaustively, so
+    keyword-matching against already-targeted sources does more harm than good.
+
+    So: trust Google News/PIB sources completely. Only filter BBC Hindi.
+    """
+    if source != "BBC Hindi":
+        return True  # already topic-targeted by its search query, trust it
+
+    text = f"{title} {summary}"
+    text_lower = text.lower()
+
+    if any(kw in text_lower for kw in POLICY_KEYWORDS_EN):
+        return True
+    if any(kw in text for kw in POLICY_KEYWORDS_HI):
+        return True
+    return False
+
+
+# ---------------------------------------------------------------------------
 # STEP 6: Build cleaned_records table
 # ---------------------------------------------------------------------------
 def init_cleaned_table(conn):
@@ -190,9 +270,23 @@ def run_integration():
     print(f"Removed {dropped} near-duplicate records (same story, different feed/wording).")
     print(f"{failed_dates} records had a date that could not be parsed (published_date = NULL).")
 
+    relevant = [r for r in deduped if is_policy_relevant(r["source"], r["title_clean"], r["summary_clean"])]
+    irrelevant = [r for r in deduped if not is_policy_relevant(r["source"], r["title_clean"], r["summary_clean"])]
+    off_topic_dropped = len(irrelevant)
+    print(f"Removed {off_topic_dropped} off-topic/general-news records (not policy/scheme related).")
+
+    # Save the dropped records too, so you can SHOW your cleaning work in your
+    # presentation (before/after proof), not just claim it happened.
+    if irrelevant:
+        with open("dropped_irrelevant_records.csv", "w", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(f, fieldnames=list(irrelevant[0].keys()))
+            writer.writeheader()
+            writer.writerows(irrelevant)
+        print(f"Saved dropped records to dropped_irrelevant_records.csv for reference.")
+
     init_cleaned_table(conn)
     cur = conn.cursor()
-    for rec in deduped:
+    for rec in relevant:
         cur.execute("""
             INSERT INTO cleaned_records
             (id, source, title_clean, summary_clean, link, published_date,
@@ -205,11 +299,11 @@ def run_integration():
 
     # export CSV too, for easy sharing with model/backend teammate
     with open(CSV_PATH, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=list(deduped[0].keys()) if deduped else [])
+        writer = csv.DictWriter(f, fieldnames=list(relevant[0].keys()) if relevant else [])
         writer.writeheader()
-        writer.writerows(deduped)
+        writer.writerows(relevant)
 
-    print(f"\nDone. cleaned_records table has {len(deduped)} rows.")
+    print(f"\nDone. cleaned_records table has {len(relevant)} rows.")
     print(f"Exported: {CSV_PATH}")
 
     # quick breakdown, useful for your presentation slide

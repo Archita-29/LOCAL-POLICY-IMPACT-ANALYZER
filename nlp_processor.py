@@ -52,6 +52,39 @@ def compute_impact_score(label, score):
     else:
         return 50.00
 
+def analyze_sentiment(df):
+    model = init_sentiment_model()
+    results = []
+
+    # Map raw HuggingFace labels to clean text
+    label_map = {
+        "LABEL_0": "Negative",
+        "LABEL_1": "Neutral",
+        "LABEL_2": "Positive",
+    }
+
+    for _, row in df.iterrows():
+        text = f"{row['title_clean']} {row['summary_clean']}".strip()
+        if not text:
+            continue
+
+        res = model(text[:512])[0]
+        raw_label = res["label"]
+        confidence = res["score"]
+
+        clean_label = label_map.get(raw_label, raw_label)
+        impact_score = compute_impact_score(clean_label, confidence)
+
+        results.append(
+            {
+                "id": row["id"],
+                "sentiment_label": clean_label,
+                "sentiment_score": round(confidence, 4),
+                "impact_score": impact_score,
+            }
+        )
+    return pd.DataFrame(results)
+
 if __name__ == "__main__":
     df = load_cleaned_data()
     print(f"Loaded {len(df)} records for NLP processing.")

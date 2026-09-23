@@ -38,6 +38,20 @@ def analyze_sentiment(df):
         })
     return pd.DataFrame(results)
 
+def compute_impact_score(label, score):
+    """Calculates ground-level impact score (0 to 100)."""
+    label_lower = label.lower()
+    
+    # Label_2 / Positive: High Impact
+    if label_lower in ["positive", "label_2"]:
+        return round(50 + (score * 50), 2)
+    # Label_0 / Negative: Concerns / Low Impact Score
+    elif label_lower in ["negative", "label_0"]:
+        return round(50 - (score * 50), 2)
+    # Neutral: Baseline
+    else:
+        return 50.00
+
 if __name__ == "__main__":
     df = load_cleaned_data()
     print(f"Loaded {len(df)} records for NLP processing.")

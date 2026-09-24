@@ -18,74 +18,69 @@ def load_cleaned_data():
 
 def init_sentiment_model():
     """Initializes multilingual sentiment pipeline."""
-    # Multilingual model suitable for English + Hindi + Hinglish
-    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-xlm-roberta-base-sentiment")
-
-def analyze_sentiment(df):
-    model = init_sentiment_model()
-    results = []
-    
-    for _, row in df.iterrows():
-        text = f"{row['title_clean']} {row['summary_clean']}"[:512]
-        if not text.strip():
-            continue
-        
-        res = model(text)[0]
-        results.append({
-            "id": row["id"],
-            "sentiment_label": res["label"],
-            "sentiment_score": round(res["score"], 4)
-        })
-    return pd.DataFrame(results)
+    # Truncation ensures texts over model max length do not crash inference
+    return pipeline(
+        "sentiment-analysis", 
+        model="cardiffnlp/twitter-xlm-roberta-base-sentiment",
+        truncation=True,
+        max_length=512
+    )
 
 def compute_impact_score(label, score):
     """Calculates ground-level impact score (0 to 100)."""
     label_lower = label.lower()
     
-    # Label_2 / Positive: High Impact
     if label_lower in ["positive", "label_2"]:
         return round(50 + (score * 50), 2)
-    # Label_0 / Negative: Concerns / Low Impact Score
     elif label_lower in ["negative", "label_0"]:
         return round(50 - (score * 50), 2)
-    # Neutral: Baseline
     else:
         return 50.00
 
-def analyze_sentiment(df):
-    model = init_sentiment_model()
-    results = []
+def analyze_sentiment(df, batch_size=32):
+    """Runs batch sentiment analysis and maps scores."""
+    if df.empty:
+        print("Warning: Input DataFrame is empty.")
+        return pd.DataFrame()
 
-    # Map raw HuggingFace labels to clean text
+    model = init_sentiment_model()
+    
+    # Prepare combined text inputs
+    texts = (
+        (df["title_clean"].fillna("") + " " + df["summary_clean"].fillna(""))
+        .str.strip()
+        .str[:512]
+        .tolist()
+    )
+
     label_map = {
         "LABEL_0": "Negative",
         "LABEL_1": "Neutral",
         "LABEL_2": "Positive",
     }
 
-    for _, row in df.iterrows():
-        text = f"{row['title_clean']} {row['summary_clean']}".strip()
-        if not text:
-            continue
+    # Batch processing for significantly faster execution
+    predictions = model(texts, batch_size=batch_size)
 
-        res = model(text[:512])[0]
+    results = []
+    for record_id, res in zip(df["id"], predictions):
         raw_label = res["label"]
         confidence = res["score"]
 
         clean_label = label_map.get(raw_label, raw_label)
         impact_score = compute_impact_score(clean_label, confidence)
 
-        results.append(
-            {
-                "id": row["id"],
-                "sentiment_label": clean_label,
-                "sentiment_score": round(confidence, 4),
-                "impact_score": impact_score,
-            }
-        )
+        results.append({
+            "id": record_id,
+            "sentiment_label": clean_label,
+            "sentiment_score": round(confidence, 4),
+            "impact_score": impact_score,
+        })
+
     return pd.DataFrame(results)
 
 def save_nlp_results(df):
+    """Saves output to SQLite table and CSV export."""
     conn = sqlite3.connect(DB_PATH)
     df.to_sql("nlp_processed_records", conn, if_exists="replace", index=False)
     conn.close()
@@ -94,14 +89,18 @@ def save_nlp_results(df):
 def main():
     print("Step 1: Loading clean policy data...")
     df = load_cleaned_data()
+    print(f"Loaded {len(df)} records for NLP processing.")
     
+    if df.empty:
+        print("No records found to process. Exiting.")
+        return
+
     print("Step 2: Processing Sentiment & Impact Scores...")
-    # Add sentiment + impact calculation logic here
+    nlp_df = analyze_sentiment(df)
     
     print("Step 3: Saving output to SQLite & CSV...")
-    # save_nlp_results(nlp_df)
+    save_nlp_results(nlp_df)
     print("Processing complete!")
 
 if __name__ == "__main__":
-    df = load_cleaned_data()
-    print(f"Loaded {len(df)} records for NLP processing.")
+    main()

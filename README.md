@@ -5,7 +5,6 @@
 `rss_pipeline.py` scrapes government scheme and policy-related news from RSS feeds, 
 detects language, deduplicates entries, and stores them in a local SQLite database 
 (`policy_data.db`).
-
 ### Sources
 | Source | Method | Notes |
 |---|---|---|

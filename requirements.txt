@@ -1,0 +1,16 @@
+# Data Processing & Database
+pandas>=2.0.0
+numpy>=1.24.0
+
+# NLP & Machine Learning (Hugging Face)
+transformers>=4.38.0
+torch>=2.0.0
+
+# Tokenizers & Dependencies for XLM-RoBERTa
+sentencepiece>=0.2.0
+protobuf>=4.25.0
+tiktoken>=0.6.0
+
+# Optional / Utility (RSS Parsing)
+feedparser>=6.0.0
+requests>=2.31.0

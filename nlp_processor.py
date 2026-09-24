@@ -85,6 +85,23 @@ def analyze_sentiment(df):
         )
     return pd.DataFrame(results)
 
+def save_nlp_results(df):
+    conn = sqlite3.connect(DB_PATH)
+    df.to_sql("nlp_processed_records", conn, if_exists="replace", index=False)
+    conn.close()
+    df.to_csv("nlp_policy_impact_results.csv", index=False)
+
+def main():
+    print("Step 1: Loading clean policy data...")
+    df = load_cleaned_data()
+    
+    print("Step 2: Processing Sentiment & Impact Scores...")
+    # Add sentiment + impact calculation logic here
+    
+    print("Step 3: Saving output to SQLite & CSV...")
+    # save_nlp_results(nlp_df)
+    print("Processing complete!")
+
 if __name__ == "__main__":
     df = load_cleaned_data()
     print(f"Loaded {len(df)} records for NLP processing.")

@@ -34,8 +34,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from scraper.rss.models import Base, RawRecord, CleanedRecord
+from scraper.rss.config import get_database_url
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///policy_impact.db")
+DATABASE_URL = get_database_url()
 CSV_PATH = "cleaned_policy_data.csv"
 
 # Explicit column order for CSV export

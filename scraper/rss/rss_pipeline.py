@@ -35,11 +35,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from scraper.rss.models import Base, RawRecord
+from scraper.rss.config import get_database_url
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///policy_impact.db")
+DATABASE_URL = get_database_url()
 
 RSS_FEEDS = {
     "BBC Hindi": "https://feeds.bbci.co.uk/hindi/rss.xml",
@@ -125,7 +126,7 @@ def run_rss_scrape(db_url: str | None = None) -> tuple[int, int]:
             print(f"Fetching: {source_name} ...")
             feed = feedparser.parse(feed_url)
 
-            if feed.bozo:
+            if feed.bozo and not feed.entries:
                 print(f"  Warning: could not cleanly parse {source_name} ({feed.bozo_exception})")
 
             for entry in feed.entries:

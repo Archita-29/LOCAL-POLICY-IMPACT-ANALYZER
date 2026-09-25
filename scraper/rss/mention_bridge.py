@@ -33,10 +33,12 @@ for p in [_backend_path, _parent_root, _ml_path]:
         sys.path.insert(0, p)
 
 from scraper.rss.models import Base as RSSBase, CleanedRecord
+from scraper.rss.config import get_database_url
+from scraper.rss.sentiment import predict_sentiment
 from app.core.database import Base as BackendBase
 from app.models.models import Scheme, Mention, ImpactScore
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///backend/policy_impact.db")
+DATABASE_URL = get_database_url()
 
 # Bilingual pattern dictionary for mapping news to schemes
 SCHEME_PATTERNS = {
@@ -73,12 +75,6 @@ def bridge_to_mentions(db_url: str | None = None) -> dict:
     session = Session()
 
     stats = {"inserted": 0, "skipped_no_match": 0, "skipped_duplicate": 0}
-
-    # Try importing sentiment analyzer
-    try:
-        from ml.sentiment_analyzer import predict_sentiment
-    except ImportError:
-        predict_sentiment = None
 
     try:
         schemes = session.query(Scheme).all()

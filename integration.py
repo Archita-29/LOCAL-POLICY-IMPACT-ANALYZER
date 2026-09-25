@@ -224,7 +224,7 @@ POLICY_KEYWORDS_EN = [
     "awas yojana", "housing scheme", "highway project", "infrastructure project",
     "smart city",
     "election commission", "voter list", "special intensive revision", "evm",
-    "sir revision",
+    "sir revision", "uniform civil code", "ucc",
 ]
 POLICY_KEYWORDS_HI = [
     "योजना", "सरकार", "मंत्रालय", "कैबिनेट", "सब्सिडी", "बजट", "कर",
@@ -240,22 +240,45 @@ POLICY_KEYWORDS_HI = [
 ]
 
 
+GENERAL_NEWS_SOURCES = {"BBC Hindi", "India Today"}
+
+
 def is_policy_relevant(source, title, summary):
     """
     Returns True/False -- used only to SET a flag column, never to drop a row.
 
-    Only BBC Hindi is filtered: it's a general news feed (pulls ALL BBC Hindi
-    news), unlike the Google News/PIB sources, which are already topic-
-    targeted by their own search query (e.g. "sarkari yojana",
+    Only sources in GENERAL_NEWS_SOURCES are filtered: these are broad news
+    feeds (BBC Hindi's full feed, India Today's homepage feed) that pull ALL
+    news, not just policy news. The Google News/PIB sources are already
+    topic-targeted by their own search query (e.g. "sarkari yojana",
     "site:pib.gov.in") and are trusted as relevant by default.
+
+    NOTE: if a teammate adds another general/homepage-style feed later,
+    add its exact source name to GENERAL_NEWS_SOURCES above so it gets
+    filtered too -- otherwise its general news will incorrectly pass
+    through as "relevant".
+
+    Uses WORD-BOUNDARY matching for English keywords (via regex \\b), not
+    plain substring checks -- otherwise short keywords like "act", "bill",
+    "tax", "fund", "grant", "wage" would wrongly match inside unrelated
+    words like "actor", "billion", "taxi", "fundamental", "grantor",
+    "wagering". (Caught this with a test case: "Bollywood actor wins
+    award" was wrongly flagged relevant because "act" matched inside
+    "actor" under plain substring matching.)
     """
-    if source != "BBC Hindi":
+    if source not in GENERAL_NEWS_SOURCES:
         return True
 
     text = f"{title} {summary}"
     text_lower = text.lower()
-    if any(kw in text_lower for kw in POLICY_KEYWORDS_EN):
-        return True
+
+    for kw in POLICY_KEYWORDS_EN:
+        if re.search(r"\b" + re.escape(kw) + r"\b", text_lower):
+            return True
+    # Hindi keywords: word-boundary regex doesn't work reliably across
+    # Devanagari (no \b support the same way), but Hindi policy terms here
+    # are mostly multi-character words/compounds, so plain substring
+    # matching is safe enough in practice.
     if any(kw in text for kw in POLICY_KEYWORDS_HI):
         return True
     return False

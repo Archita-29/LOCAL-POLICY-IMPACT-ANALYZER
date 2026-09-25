@@ -1,43 +1,65 @@
 # LOCAL-POLICY-IMPACT-ANALYZER
-## Data Collection & Scraping
 
-### Overview
-`rss_pipeline.py` scrapes government scheme and policy-related news from RSS feeds, 
-detects language, deduplicates entries, and stores them in a local SQLite database 
-(`policy_data.db`).
+## Overview
 
-### Sources
+RSS-based data collection and integration pipeline for the Local Policy Impact Analyzer project.
+
+This module scrapes government scheme news from RSS feeds, cleans and normalizes the data, and bridges it into the main project's `Mention` table for impact scoring.
+
+## Architecture
+
+```
+scraper/rss/
+├── __init__.py
+├── models.py           # SQLAlchemy models for raw_records + cleaned_records
+├── rss_pipeline.py     # RSS scraper (feedparser-based)
+├── integration.py      # Data cleaning, dedup flagging, relevance flagging
+├── mention_bridge.py   # Bridge: cleaned_records → backend Mention table
+├── run_rss_pipeline.py # CLI runner for full pipeline
+└── api.py              # FastAPI endpoint to trigger pipeline via HTTP
+```
+
+## Data Sources
+
 | Source | Method | Notes |
 |---|---|---|
-| BBC Hindi | Direct RSS | Stable |
+| BBC Hindi | Direct RSS | Stable, general news (filtered for relevance) |
 | Google News - Govt Scheme (Hindi) | Google News RSS search | Query: `sarkari yojana` |
 | Google News - Govt Scheme (English) | Google News RSS search | Query: `government scheme india` |
-| PIB via Google News | Google News RSS search (`site:pib.gov.in`) | **PIB's own direct RSS feed is broken/returns 0 entries** — this is a workaround that pulls PIB content indirectly through Google News instead |
+| PIB via Google News | Google News RSS search (`site:pib.gov.in`) | Workaround for broken PIB RSS |
 
-### Database Schema (`raw_records` table)
-| Field | Type | Description |
-|---|---|---|
-| `id` | TEXT (PK) | MD5 hash of title+link, used for deduplication |
-| `source` | TEXT | Which feed the record came from |
-| `title` | TEXT | Cleaned article title (HTML stripped) |
-| `summary` | TEXT | Cleaned article summary (HTML stripped) |
-| `link` | TEXT | Original article URL |
-| `published` | TEXT | Publish date as provided by the feed (format varies by source) |
-| `language` | TEXT | `hindi`, `hinglish`, or `english` — see limitation below |
-| `scraped_at` | TEXT | UTC timestamp of when this script inserted the record |
+## Pipeline Stages
 
-### Known Limitations
-- **Language detection is a simple heuristic**, not a proper NLP classifier: it 
-  counts Devanagari characters and checks against a small Hinglish wordlist. It 
-  is NOT highly accurate and may misclassify short or ambiguous text. Anyone doing 
-  NLP work downstream should treat this as a rough tag, not ground truth.
-- **Deduplication is exact-match only** (same title+link hash). Near-duplicate 
-  articles (same story, slightly different wording/source) are NOT caught.
-- **`published` date format varies by source** — not normalized yet. Needs 
-  parsing/standardization before use in any time-based analysis.
+1. **Scrape** (`rss_pipeline.py`): Fetch RSS feeds → `raw_records` table
+2. **Clean** (`integration.py`): Text cleaning, date normalization, language refinement, near-duplicate grouping, policy relevance flagging → `cleaned_records` table
+3. **Bridge** (`mention_bridge.py`): Match cleaned records to schemes by name → `mentions` table
 
-### Running it
+## Running
+
+### CLI (standalone)
+```bash
+pip install -r requirements.txt
+python -m scraper.rss.run_rss_pipeline
 ```
-pip install requests beautifulsoup4 feedparser
-python rss_pipeline.py
+
+### API (via FastAPI)
+```python
+# In backend/app/main.py, add:
+from scraper.rss.api import rss_router
+app.include_router(rss_router, prefix="/api/scraper")
 ```
+Then POST to `http://localhost:8000/api/scraper/rss/run`.
+
+## Known Limitations
+
+- **Language detection is heuristic-based**, not a proper NLP classifier
+- **Deduplication is title-similarity-based** (SequenceMatcher ≥ 0.85 threshold)
+- **Scheme matching is substring-based** — may miss schemes with very short/generic names
+- **Sentiment scores are NOT filled** by this pipeline — the ML sentiment model (Phase 3) handles that
+
+## Original Files
+
+The original standalone scripts are preserved in the repo root:
+- `rss_pipeline.py` — original by Antra
+- `integration.py` — original, later improved in code review
+- `query.py` — debug query script

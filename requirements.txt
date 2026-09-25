@@ -1,0 +1,11 @@
+# RSS Pipeline Dependencies
+feedparser>=6.0.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+
+# SQLAlchemy (for refactored pipeline)
+sqlalchemy>=2.0.0
+
+# FastAPI (for API endpoint — optional, only if running API from this repo)
+fastapi>=0.100.0
+uvicorn>=0.22.0

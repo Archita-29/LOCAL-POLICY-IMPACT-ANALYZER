@@ -1,5 +1,9 @@
 .venv/
 policy_data.db
+policy_impact.db
+*.db
 tempCodeRunnerFile.python
 __pycache__/
 *.pyc
+*.py[cod]
+cleaned_policy_data.csv

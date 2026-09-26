@@ -9,7 +9,8 @@ RSS_FEEDS = {
     "Google News - Govt Scheme (Hindi)": "https://news.google.com/rss/search?q=sarkari+yojana&hl=hi&gl=IN&ceid=IN:hi",
     "Google News - Govt Scheme (English)": "https://news.google.com/rss/search?q=government+scheme+india&hl=en-IN&gl=IN&ceid=IN:en",
     "PIB via Google News": "https://news.google.com/rss/search?q=site:pib.gov.in&hl=en-IN&gl=IN&ceid=IN:en",
-}
+    "India Today":"https://www.indiatoday.in/rss/home",
+    }
  
 DB_PATH = "policy_data.db"
 def init_db():

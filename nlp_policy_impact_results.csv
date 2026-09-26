@@ -1,0 +1,323 @@
+id,source,language,story_group_id,sentiment_label,sentiment_score,impact_score
+0dd83a998d0dec582ee4b86d2931f25d,BBC Hindi,hindi,group_0001,neutral,0.5136,50.0
+7ec29a2ad0aa15235f5f5b8108f72ad7,BBC Hindi,hindi,group_0002,neutral,0.5384,50.0
+868d1ec33131c35f83e9490191188444,BBC Hindi,hindi,group_0003,negative,0.5664,21.68
+50c3ec2b4d8d3cdf1fbf8468026dd4cf,BBC Hindi,hindi,group_0005,negative,0.4142,29.29
+e6e665005845ec3a41f5c421a8c4fc72,BBC Hindi,hindi,group_0006,negative,0.7037,14.81
+746dd1033251e8106c8a5ea6917a8526,BBC Hindi,hindi,group_0008,negative,0.6532,17.34
+c609568a1c8582f5f3266ac6dba66a13,BBC Hindi,hindi,group_0009,negative,0.732,13.4
+303be78530ddcb8a2e774ad819ec3234,BBC Hindi,hindi,group_0010,neutral,0.5719,50.0
+78cc52cf3f9499adfdc7fd8794d45f55,BBC Hindi,hindi,group_0011,negative,0.4255,28.72
+8ebe7ed18c2d1c7d2d0caa6ef4ea8695,BBC Hindi,hindi,group_0012,negative,0.7418,12.91
+5c8051fb905b98d6685c8625d59e33d2,BBC Hindi,hindi,group_0015,neutral,0.455,50.0
+c5d32d498638f53fd6647a6521e8ea78,BBC Hindi,hindi,group_0016,neutral,0.554,50.0
+0a027e2f3f307ffc47813543a5b4a126,BBC Hindi,hindi,group_0017,neutral,0.4805,50.0
+12b4059fbe333732c7148d08fc0e1913,BBC Hindi,hindi,group_0018,neutral,0.4875,50.0
+4229ae8fc68470bec393997015e27cf9,BBC Hindi,hindi,group_0019,negative,0.4493,27.54
+618899b69473173816876018ecec0275,BBC Hindi,hindi,group_0020,negative,0.5173,24.13
+5ff3d68da6b866d785f88a5c2b9425ac,BBC Hindi,hindi,group_0021,negative,0.5755,21.22
+8bf9600cbbce843bda644a4fecdad487,BBC Hindi,hindi,group_0022,negative,0.6679,16.6
+aa74d2b60369fe0143b73fd685c859a4,BBC Hindi,hindi,group_0023,negative,0.7025,14.87
+077657b96b3aba6ff5716510384f2aa0,BBC Hindi,hindi,group_0024,neutral,0.4126,50.0
+8018e8264c3509610332afd8ec96b762,BBC Hindi,hindi,group_0025,neutral,0.6237,50.0
+d6c75e1d02ee72de41dcf2b5a7782aaf,BBC Hindi,hindi,group_0026,negative,0.3912,30.44
+6375ada3b00f486914f598fd5814f6ba,BBC Hindi,hindi,group_0028,neutral,0.5759,50.0
+b82abee65617341644075f324e60cd78,BBC Hindi,hindi,group_0029,neutral,0.4489,50.0
+8876401ce63a1acfacb15963135a0bcf,BBC Hindi,hindi,group_0030,negative,0.6595,17.03
+d21e991ffe51f999fa211c95d78f4f99,BBC Hindi,hindi,group_0031,neutral,0.5435,50.0
+190f7bd086936affd7436db18bca583f,BBC Hindi,hindi,group_0032,negative,0.7442,12.79
+101b0d6c3830d10fff3c5a094e30dc8d,BBC Hindi,hindi,group_0035,neutral,0.3756,50.0
+651499e512d6eaa8028c4f88878099b9,BBC Hindi,hindi,group_0036,neutral,0.699,50.0
+226fbd1e3614b7795efd51b5a0952924,Google News - Govt Scheme (Hindi),hindi,group_0037,positive,0.5901,79.51
+0def77b47a496e97bfb8dad7d204b65a,Google News - Govt Scheme (Hindi),hindi,group_0038,neutral,0.4844,50.0
+3e9bd3aff3b5b10a039771fa44810d9a,Google News - Govt Scheme (Hindi),hindi,group_0039,neutral,0.6561,50.0
+a9cf520d3d9371012a6f2dc29b998e2e,Google News - Govt Scheme (Hindi),hindi,group_0040,neutral,0.5006,50.0
+96ebb7ae464f6cbb401f2aea2b884283,Google News - Govt Scheme (Hindi),hindi,group_0041,neutral,0.5303,50.0
+af5475a0ec624d44dce23d9d8875e38e,Google News - Govt Scheme (Hindi),hindi,group_0042,neutral,0.6312,50.0
+c27f1fa23b22d3ef25378033dd75397b,Google News - Govt Scheme (Hindi),hindi,group_0043,positive,0.5923,79.61
+1393b7102db2fd973b0d2b2ca7e72775,Google News - Govt Scheme (Hindi),hindi,group_0044,positive,0.4191,70.95
+ad938b25991569737e9ea4dca30fdf51,Google News - Govt Scheme (Hindi),hindi,group_0045,neutral,0.68,50.0
+b4b42ac00a3480aa75a17784d14f6d94,Google News - Govt Scheme (Hindi),hindi,group_0046,neutral,0.5086,50.0
+23cb4629358e950a3346d6eb03785166,Google News - Govt Scheme (Hindi),hindi,group_0047,neutral,0.5052,50.0
+712e6af89a95624c0af9618f99be50e2,Google News - Govt Scheme (Hindi),hindi,group_0048,positive,0.5457,77.28
+d1f1690687e19bdb81b020597ee082f2,Google News - Govt Scheme (Hindi),hindi,group_0049,neutral,0.514,50.0
+2b6ea0c3001b7d644d51c260851309fa,Google News - Govt Scheme (Hindi),hindi,group_0050,neutral,0.4135,50.0
+5cdf344acb558d4d3e25397b9b4f6625,Google News - Govt Scheme (Hindi),hindi,group_0051,neutral,0.4551,50.0
+cfd8223776e03823477d78ff504667d9,Google News - Govt Scheme (Hindi),hindi,group_0052,neutral,0.495,50.0
+7175a9c0ccec691daf07a5185c25c2b4,Google News - Govt Scheme (Hindi),hindi,group_0053,negative,0.4387,28.07
+2786fd5f9b3f3114e726a69155f048af,Google News - Govt Scheme (Hindi),hindi,group_0054,neutral,0.498,50.0
+cd293d16ba7ca072d7d7d7aa5109fe72,Google News - Govt Scheme (Hindi),hindi,group_0055,neutral,0.644,50.0
+6746a76c30cd6ac5b187ff57b6c5c0bf,Google News - Govt Scheme (Hindi),hindi,group_0056,positive,0.4994,74.97
+bd796a672faa8f007ad97b0d466de56c,Google News - Govt Scheme (Hindi),hindi,group_0057,positive,0.4911,74.56
+fe544c78bc5ae1ade006202216be98a3,Google News - Govt Scheme (Hindi),hindi,group_0058,neutral,0.4577,50.0
+6dece95275bac7ceb4f4986f91a97be0,Google News - Govt Scheme (Hindi),hindi,group_0059,neutral,0.4883,50.0
+166aeff842c1791b1163bd3dcff63fed,Google News - Govt Scheme (Hindi),hindi,group_0060,positive,0.5442,77.21
+fbe0feb060db9b1ede0ae9c8cfc2a7e8,Google News - Govt Scheme (Hindi),hindi,group_0061,neutral,0.497,50.0
+abc26b3f0476374a8e41db881336fda1,Google News - Govt Scheme (Hindi),hindi,group_0062,positive,0.74,87.0
+6c0c49c378388afd6287a4bd6dd50c75,Google News - Govt Scheme (Hindi),hindi,group_0063,positive,0.6017,80.09
+381ac3a596fc28b5d1f8ac5dfa049cdb,Google News - Govt Scheme (Hindi),hindi,group_0064,neutral,0.5851,50.0
+4cdc8f8d3a2dec0f07134e577e976262,Google News - Govt Scheme (Hindi),hindi,group_0065,positive,0.5633,78.16
+c0c34adf11f46f6050b67b899a4e4680,Google News - Govt Scheme (Hindi),hindi,group_0066,positive,0.4837,74.19
+c3d5d6deeba2f5fba821a9ac2051d4eb,Google News - Govt Scheme (Hindi),hindi,group_0067,neutral,0.5882,50.0
+e1316cd00019b87c1d08c335dd14cdc3,Google News - Govt Scheme (Hindi),hindi,group_0068,positive,0.6656,83.28
+ad2b7e0125b7a59a803b7b69e673c6ae,Google News - Govt Scheme (Hindi),hindi,group_0069,neutral,0.4856,50.0
+6828fafaa716ae1989df2ed8557932b2,Google News - Govt Scheme (Hindi),hindi,group_0070,neutral,0.569,50.0
+1931cb6355213bc87c3f0135b452cf6c,Google News - Govt Scheme (Hindi),hindi,group_0071,neutral,0.4935,50.0
+d2c3dee29f2019e4cd0d238ea62b45e7,Google News - Govt Scheme (Hindi),hindi,group_0072,neutral,0.498,50.0
+76729f2fd2ead4b99f0fdcf4171b3c81,Google News - Govt Scheme (Hindi),hindi,group_0073,positive,0.6095,80.47
+a125208355fcf346b86261c78f4b35f5,Google News - Govt Scheme (Hindi),hindi,group_0074,neutral,0.5736,50.0
+1c4b72215847bdd67eaf687fbfb5ef13,Google News - Govt Scheme (Hindi),hindi,group_0075,neutral,0.5331,50.0
+51770658ab2ebd0305df34d6f3308b49,Google News - Govt Scheme (Hindi),hindi,group_0076,neutral,0.4945,50.0
+87dfad8f06626cb2ad5a26e19afb1a73,Google News - Govt Scheme (Hindi),hindi,group_0077,positive,0.4581,72.91
+b1c29f6913e8387beed30a22db6fb104,Google News - Govt Scheme (Hindi),hindi,group_0078,neutral,0.5353,50.0
+c1d415fb068c25756ff1e0e9d89a86b3,Google News - Govt Scheme (Hindi),hindi,group_0079,neutral,0.4779,50.0
+c3a2390757844ac644094bc901067e94,Google News - Govt Scheme (Hindi),hindi,group_0080,neutral,0.4593,50.0
+533fe9344b0df423220c701e0b3a713c,Google News - Govt Scheme (Hindi),hindi,group_0081,negative,0.5489,22.56
+805d17b92792e6a9e5575fe0eb4268f5,Google News - Govt Scheme (Hindi),hindi,group_0082,positive,0.5918,79.59
+7dffa1f451a5d8b74317c82b4532bad8,Google News - Govt Scheme (Hindi),hindi,group_0083,positive,0.8785,93.92
+70b80263463d5516fe31d2c739d66549,Google News - Govt Scheme (Hindi),hindi,group_0084,neutral,0.5404,50.0
+3d7506c2f9504bcca10d233021651885,Google News - Govt Scheme (Hindi),hindi,group_0085,neutral,0.5441,50.0
+ae5037343810860d80fc87be6ec8fb5f,Google News - Govt Scheme (Hindi),hindi,group_0086,positive,0.4627,73.13
+8cd9f3a0a93bbb58f172b4796f826cda,Google News - Govt Scheme (Hindi),hindi,group_0087,neutral,0.4879,50.0
+1a28ffcec433fa4efc59832d293d15b8,Google News - Govt Scheme (Hindi),hindi,group_0088,positive,0.5246,76.23
+504b597b9d833819282caf8c9ed4168b,Google News - Govt Scheme (Hindi),hindi,group_0089,neutral,0.5589,50.0
+b3224aac1f84ea0b1b0c492c541dc2ae,Google News - Govt Scheme (Hindi),hindi,group_0090,negative,0.8191,9.04
+410a129fd4a4dd04621f50f6e77b505f,Google News - Govt Scheme (Hindi),hindi,group_0091,neutral,0.5427,50.0
+f41bdcc5758c30bb4473855f7eb05d7d,Google News - Govt Scheme (Hindi),hindi,group_0092,neutral,0.6045,50.0
+a30b9513c73d49be9df0984f69cd8a88,Google News - Govt Scheme (Hindi),hindi,group_0093,positive,0.5082,75.41
+423211b17d67ec6f729bd6dbcab6e3a4,Google News - Govt Scheme (Hindi),hindi,group_0094,positive,0.7872,89.36
+36dcb7ee136f4fea9efeed16e5db82d3,Google News - Govt Scheme (Hindi),hindi,group_0095,neutral,0.485,50.0
+35a75cd0400536c382bc1a72151d7382,Google News - Govt Scheme (Hindi),hindi,group_0096,positive,0.4795,73.98
+ac64a702ce67d5e233effe569acf9024,Google News - Govt Scheme (Hindi),hindi,group_0097,neutral,0.5006,50.0
+e3cf4af23279c37a2b68b8be3d08f537,Google News - Govt Scheme (Hindi),hindi,group_0098,positive,0.803,90.15
+1e451d27c7e875469703e6e438560c70,Google News - Govt Scheme (Hindi),hindi,group_0099,positive,0.7457,87.29
+0315b318a6f42025471c927a51dfa6c9,Google News - Govt Scheme (Hindi),hindi,group_0100,neutral,0.5038,50.0
+fc3971b9893988258f5f16f526c0f5b2,Google News - Govt Scheme (Hindi),hindi,group_0101,neutral,0.565,50.0
+0763121af417e6af34a137cd95f54fdb,Google News - Govt Scheme (Hindi),hindi,group_0102,positive,0.7752,88.76
+e3943f37fd0f4a49002a97ad58dd45d8,Google News - Govt Scheme (Hindi),hindi,group_0103,positive,0.5795,78.97
+d63c76c0d623eb9117a258972412d52d,Google News - Govt Scheme (Hindi),hindi,group_0104,neutral,0.533,50.0
+ece282bdc04e779cda4306819ac68054,Google News - Govt Scheme (Hindi),hindi,group_0105,positive,0.8107,90.53
+88fb9bdb83a6f6b7b1f355f40bd93e15,Google News - Govt Scheme (Hindi),hindi,group_0106,neutral,0.5084,50.0
+7ce5de58a4647d1a6a0a59910376a702,Google News - Govt Scheme (Hindi),hindi,group_0107,neutral,0.4864,50.0
+6e5bb46dc3c1b39dde5d6f86d0dd2470,Google News - Govt Scheme (Hindi),hindi,group_0108,positive,0.4961,74.8
+ad2a1f549f812f338d05135731a59597,Google News - Govt Scheme (Hindi),hindi,group_0109,positive,0.4544,72.72
+a7b566a12dd7d465e44e29c87a42eb7c,Google News - Govt Scheme (Hindi),hindi,group_0110,positive,0.5956,79.78
+bf37fd7d023b1da4e65a5b098512b44c,Google News - Govt Scheme (Hindi),hindi,group_0111,neutral,0.7045,50.0
+ccd986a990d371535b6f774a330d2758,Google News - Govt Scheme (Hindi),hindi,group_0112,neutral,0.7425,50.0
+379063aec15823fec869dfbc718af35c,Google News - Govt Scheme (Hindi),hindi,group_0113,neutral,0.6599,50.0
+eb0b38ae4b39dbda68b8da4f744fb4d5,Google News - Govt Scheme (Hindi),hindi,group_0114,positive,0.5539,77.7
+cc3976115b1e42d404ffb1817c314068,Google News - Govt Scheme (Hindi),hindi,group_0115,neutral,0.505,50.0
+f92e06c12774cc776d03cb351288eb27,Google News - Govt Scheme (Hindi),hindi,group_0116,neutral,0.6095,50.0
+4447aa36c3541993a0a62435f063b74c,Google News - Govt Scheme (Hindi),hindi,group_0117,positive,0.6308,81.54
+ca0fdc159cb66d5d84d7abd379a64cf3,Google News - Govt Scheme (Hindi),hindi,group_0118,neutral,0.4987,50.0
+7bb98cf7c3c9e7ae6f2f57c0e94d13a7,Google News - Govt Scheme (Hindi),hindi,group_0119,neutral,0.4697,50.0
+ce5c037acc4880a26a4a8c5ec3e8d06d,Google News - Govt Scheme (Hindi),hindi,group_0120,neutral,0.4621,50.0
+25272a98e66abcaef200df6102f73945,Google News - Govt Scheme (Hindi),hindi,group_0121,neutral,0.5602,50.0
+7147041e53d66cb87afc674a8cf43ba3,Google News - Govt Scheme (Hindi),hindi,group_0122,positive,0.4573,72.87
+94beed3ca7da2f1a543105896a028aa1,Google News - Govt Scheme (Hindi),hindi,group_0123,neutral,0.4998,50.0
+8e2de025e2b644a6ff710d946001af37,Google News - Govt Scheme (Hindi),hindi,group_0124,neutral,0.5842,50.0
+f22237c55ca26da31a0c25449290d92f,Google News - Govt Scheme (Hindi),hindi,group_0125,positive,0.4189,70.95
+701ca878c7ad48753dc4c89e3dc96fc8,Google News - Govt Scheme (Hindi),hindi,group_0126,neutral,0.4794,50.0
+3f48f298225e93824d033d5bcd459772,Google News - Govt Scheme (Hindi),hindi,group_0127,neutral,0.5509,50.0
+7023f90075b72456ec3e005c04104b59,Google News - Govt Scheme (Hindi),hindi,group_0128,neutral,0.5451,50.0
+406eca4df59652a64bf324bb12c5b1e1,Google News - Govt Scheme (Hindi),hindi,group_0129,neutral,0.5697,50.0
+6ba0dba29a5a51ec09fe8290a1f655fb,Google News - Govt Scheme (Hindi),hindi,group_0130,positive,0.4491,72.46
+860bea6ac1b6c765697a4e9c461a3945,Google News - Govt Scheme (Hindi),hindi,group_0131,positive,0.5193,75.96
+a4bfd6767c4969b0813deeedd0426601,Google News - Govt Scheme (Hindi),hindi,group_0132,negative,0.4741,26.29
+d9fb84a5e2971202400eadde26e95db5,Google News - Govt Scheme (Hindi),hindi,group_0133,negative,0.5012,24.94
+7d38b389de0e06609d9822253096a41f,Google News - Govt Scheme (Hindi),hindi,group_0134,neutral,0.4857,50.0
+927f9b286d87c591728942cc818afc86,Google News - Govt Scheme (Hindi),hindi,group_0135,neutral,0.4258,50.0
+4d40b44dddb3d3e9d48c41c7d510f405,Google News - Govt Scheme (English),english,group_0136,neutral,0.5068,50.0
+2683956cdb03b56610a02cf905fc038f,Google News - Govt Scheme (English),english,group_0137,neutral,0.518,50.0
+6dcc68a9c6e226507e9378a3f87b132a,Google News - Govt Scheme (English),english,group_0138,neutral,0.5374,50.0
+f7c9947fbc2c7d1986159c617279346c,Google News - Govt Scheme (English),english,group_0139,neutral,0.8513,50.0
+d0bf51ae78b3a77e285c5c891aa7f6cc,Google News - Govt Scheme (English),english,group_0140,positive,0.4686,73.43
+2b91cb8c750cdcabd3b69d45a6caa9ae,Google News - Govt Scheme (English),english,group_0141,neutral,0.4904,50.0
+2c26438b3b90d10f72582cd948b3bd49,Google News - Govt Scheme (English),english,group_0142,neutral,0.5169,50.0
+707c7f891deb0e10f4819d5edc853477,Google News - Govt Scheme (English),english,group_0143,neutral,0.7969,50.0
+72e656fd2d63692314a1ae51b6b46ea1,Google News - Govt Scheme (English),english,group_0144,neutral,0.5029,50.0
+e842d26e47f028b7d80c3d6d6b07e104,Google News - Govt Scheme (English),english,group_0145,neutral,0.5133,50.0
+d9dfc04a64c2155e85942bc3e624a08a,Google News - Govt Scheme (English),english,group_0146,neutral,0.4588,50.0
+2333e725091ccd6fc09a27b9f13e9bc0,Google News - Govt Scheme (English),english,group_0147,neutral,0.4544,50.0
+1be03ab4784d9437b4a76490440a633d,Google News - Govt Scheme (English),english,group_0148,neutral,0.5888,50.0
+c52b08b382cf99e71966546d05240187,Google News - Govt Scheme (English),english,group_0149,positive,0.5756,78.78
+6106ca0d4f0e426ef54a9b9dd8edea8d,Google News - Govt Scheme (English),english,group_0150,neutral,0.5335,50.0
+d4be773373cdcccedf76d03d7e6bdb1a,Google News - Govt Scheme (English),english,group_0151,negative,0.7459,12.71
+22d2cf7e70d61e9e7faaec4de78e032d,Google News - Govt Scheme (English),english,group_0152,neutral,0.4098,50.0
+ebf20d925fe985fc432cda3fa2bdacc5,Google News - Govt Scheme (English),english,group_0153,neutral,0.7745,50.0
+0928eaaeab63e4936e735609d7b6b737,Google News - Govt Scheme (English),english,group_0154,positive,0.5157,75.78
+789a630205210bdf66f0b394e321255b,Google News - Govt Scheme (English),english,group_0155,positive,0.5904,79.52
+8777d7989bcf6879c24611e2b876c800,Google News - Govt Scheme (English),english,group_0156,positive,0.4093,70.47
+173ebdb653f90757a7118bf32840e2ce,Google News - Govt Scheme (English),hinglish,group_0157,positive,0.4062,70.31
+3f6985db89e87e7c14840dcedc145f65,Google News - Govt Scheme (English),english,group_0158,neutral,0.4497,50.0
+ea35eb1713b6d21fd7d05007afde0e39,Google News - Govt Scheme (English),english,group_0159,positive,0.7464,87.32
+c462cb7331fd117a5f47f35f4a10ada7,Google News - Govt Scheme (English),hinglish,group_0160,neutral,0.4633,50.0
+c87416b3ce1b2c802e877e3edaacb7ba,Google News - Govt Scheme (English),english,group_0161,positive,0.4482,72.41
+3fa05de7285b5d756bad2181c2568783,Google News - Govt Scheme (English),english,group_0162,neutral,0.6913,50.0
+4f392cff2a3e02dee581c15dd91b88fb,Google News - Govt Scheme (English),english,group_0163,positive,0.4576,72.88
+be058255c960e7f1c126d5d17eb97c0b,Google News - Govt Scheme (English),english,group_0164,positive,0.6752,83.76
+7e0e0845214c07da035ec646220a85c9,Google News - Govt Scheme (English),english,group_0165,positive,0.5243,76.21
+d230b935c3ca39866c31e778704258a0,Google News - Govt Scheme (English),english,group_0166,positive,0.5113,75.56
+2a27a52638687a18400cb1318bb88e5c,Google News - Govt Scheme (English),english,group_0167,neutral,0.4704,50.0
+9e6ef9a93b802f8184490154da426f3c,Google News - Govt Scheme (English),english,group_0168,neutral,0.5826,50.0
+452588bde06c881bbd09c9ec18e1be80,Google News - Govt Scheme (English),english,group_0169,neutral,0.4267,50.0
+f34e7c329fbdf09861ac5f9ed57ce429,Google News - Govt Scheme (English),english,group_0170,neutral,0.509,50.0
+79013dfab81749eb081697f419226955,Google News - Govt Scheme (English),english,group_0171,neutral,0.5328,50.0
+510e4f3aed26590cac83a7a30248b62d,Google News - Govt Scheme (English),english,group_0172,neutral,0.3752,50.0
+400f90e3d63830f862f68e6863c6d769,Google News - Govt Scheme (English),english,group_0173,negative,0.8293,8.54
+a36e92a66009e5f12cc98f3be81411f7,Google News - Govt Scheme (English),english,group_0174,neutral,0.4335,50.0
+da029e98322e3d786f57ed3b05516d77,Google News - Govt Scheme (English),english,group_0175,negative,0.6446,17.77
+cdec7aae212edb7f622655dcbd7252c1,Google News - Govt Scheme (English),english,group_0176,neutral,0.4919,50.0
+3b7d7cfe527d2592f09f731fc9bb3368,Google News - Govt Scheme (English),english,group_0177,neutral,0.6916,50.0
+ce40425ac9423af6ea57700331e4eeec,Google News - Govt Scheme (English),english,group_0178,neutral,0.7488,50.0
+60e5be45ee0bc3a56369f8fa4d0e51d1,Google News - Govt Scheme (English),english,group_0179,neutral,0.5678,50.0
+956d308fa837fcb50b7f9dae76e45a70,Google News - Govt Scheme (English),english,group_0180,neutral,0.4314,50.0
+6295b376b41baa20cba941ece355b549,Google News - Govt Scheme (English),english,group_0181,neutral,0.4482,50.0
+65b70fc724528c1aadb9471965f4b05d,Google News - Govt Scheme (English),english,group_0182,neutral,0.4898,50.0
+1c744fe0b64c591f30ea705797f586a1,Google News - Govt Scheme (English),english,group_0183,neutral,0.8474,50.0
+71d740865a7b8cd3fdce45d193781f5f,Google News - Govt Scheme (English),english,group_0184,positive,0.535,76.75
+409a0faf79362e4f272f16e4a6b95ced,Google News - Govt Scheme (English),english,group_0185,neutral,0.639,50.0
+940ad8062008b17e34bcf5f0af93d0fe,Google News - Govt Scheme (English),english,group_0186,neutral,0.5151,50.0
+78a270e43e9e60b533e3d29db1a6daf2,Google News - Govt Scheme (English),english,group_0187,neutral,0.4411,50.0
+79688ec438c48d6caaba892b3caa6261,Google News - Govt Scheme (English),english,group_0188,neutral,0.4337,50.0
+8db642bc8b83a8d5cd798f9565010596,Google News - Govt Scheme (English),english,group_0189,negative,0.5678,21.61
+06205bb69f8a5d6753909a89853ca0e7,Google News - Govt Scheme (English),english,group_0190,neutral,0.4458,50.0
+0d540a052d6f347cebdc497cc0e20792,Google News - Govt Scheme (English),english,group_0191,neutral,0.7859,50.0
+6dd73d355358f6ce822cb5b8a2cab18e,Google News - Govt Scheme (English),english,group_0192,positive,0.5432,77.16
+aa342f00eeae6c675783ca4699c9c042,Google News - Govt Scheme (English),english,group_0193,positive,0.4998,74.99
+88048fd73ead8c33b47b965d62695a01,Google News - Govt Scheme (English),english,group_0194,positive,0.4468,72.34
+8b06224ef8fde8c5aaef71f143a4b758,Google News - Govt Scheme (English),english,group_0195,neutral,0.8626,50.0
+ce195bf2a1f256ae9576237efdd800e1,Google News - Govt Scheme (English),english,group_0196,neutral,0.5941,50.0
+7b00e4de4f61a2c9cf7be6a19c10cb85,Google News - Govt Scheme (English),english,group_0197,negative,0.8414,7.93
+1797f28df9e1f339b2b01ee35001b801,Google News - Govt Scheme (English),english,group_0198,neutral,0.6001,50.0
+2981c1617534d6dac79f01eb0a659366,Google News - Govt Scheme (English),english,group_0199,neutral,0.5126,50.0
+ee4109ad7317deed908e0fbb481460ea,Google News - Govt Scheme (English),english,group_0200,neutral,0.569,50.0
+4d4e4cc4ff05db6b82d71cad01ef8329,Google News - Govt Scheme (English),english,group_0201,neutral,0.6012,50.0
+cf3d03ad07bb6e62fddfc2ac534f6545,Google News - Govt Scheme (English),english,group_0202,positive,0.5275,76.37
+725d0920c6578d29b5e7a12b2cda5a18,Google News - Govt Scheme (English),english,group_0203,neutral,0.7334,50.0
+ce5bcfd12ca59a88dddc1a9ec3b13bd8,Google News - Govt Scheme (English),english,group_0204,neutral,0.4851,50.0
+4fad83bc65a40af2b1f38261aa989d99,Google News - Govt Scheme (English),english,group_0205,neutral,0.7747,50.0
+05286aaf9c896fa6994ab9397e171964,Google News - Govt Scheme (English),english,group_0206,positive,0.5786,78.93
+84702ef98f4fce563f806900f4c62e71,Google News - Govt Scheme (English),english,group_0207,neutral,0.6144,50.0
+b5706f68d6666ba9f1cefefde0ddd3c9,Google News - Govt Scheme (English),english,group_0208,neutral,0.4497,50.0
+9836bf118e9f2fd5d0eccfe0e2608630,Google News - Govt Scheme (English),english,group_0209,negative,0.8212,8.94
+95e34acac9407648eea9bb0171b4d31d,Google News - Govt Scheme (English),english,group_0210,positive,0.4916,74.58
+af21df1f2c50ac4508596680b8344952,Google News - Govt Scheme (English),english,group_0211,neutral,0.5526,50.0
+558a4b609522034b1e6c203d0e038312,Google News - Govt Scheme (English),english,group_0212,neutral,0.7162,50.0
+cb10aa8f02d3c2a84f12bfea9bdb503e,Google News - Govt Scheme (English),english,group_0213,negative,0.4626,26.87
+d0216fc5ee50de48e55af0b41c853a6c,Google News - Govt Scheme (English),english,group_0214,neutral,0.4965,50.0
+08fcb7841797916aa81676c2e088a487,Google News - Govt Scheme (English),english,group_0215,neutral,0.6254,50.0
+257d269f34d0f4602abd7a52bd7361ed,Google News - Govt Scheme (English),english,group_0216,neutral,0.6226,50.0
+25a538ecab1958af9fd9d9f857c7ace1,Google News - Govt Scheme (English),english,group_0217,neutral,0.6375,50.0
+1dac5350d704008bc2b155e0ba80d793,Google News - Govt Scheme (English),english,group_0218,neutral,0.6121,50.0
+9b85463da431d795794d0afdac24900b,Google News - Govt Scheme (English),english,group_0219,neutral,0.8755,50.0
+9c4efc41abbfef70651be6e71e1a7309,Google News - Govt Scheme (English),english,group_0220,neutral,0.4705,50.0
+48287f50ef5d1f568fa1a88a5dfa8678,Google News - Govt Scheme (English),english,group_0221,neutral,0.5728,50.0
+9eb3ae375d2e7c501f59702e82449756,Google News - Govt Scheme (English),english,group_0222,neutral,0.5755,50.0
+d129731246469e3564180c14c53dcaa6,Google News - Govt Scheme (English),english,group_0223,positive,0.5293,76.47
+83e40fea6e64c0603598e6f015c5ba8a,Google News - Govt Scheme (English),english,group_0224,neutral,0.4363,50.0
+28c306ca865756ef6dc7d4fc364830a0,Google News - Govt Scheme (English),english,group_0225,neutral,0.7634,50.0
+a6e10f8f22483e24110d461ee10a6320,Google News - Govt Scheme (English),english,group_0226,negative,0.7093,14.53
+18dd44d6573b65f3c567c9c1e79b1f0b,Google News - Govt Scheme (English),english,group_0227,negative,0.6128,19.36
+d15156031be44127c3a1e46a02e7a5eb,Google News - Govt Scheme (English),english,group_0228,neutral,0.5591,50.0
+76ffe4f4fe37f48d6c230da489da0407,Google News - Govt Scheme (English),english,group_0229,neutral,0.5873,50.0
+6ba2b2e79553a15c98b06098695fb297,Google News - Govt Scheme (English),english,group_0230,neutral,0.5394,50.0
+3d8ffbc1568671273415faf78fe5d447,Google News - Govt Scheme (English),english,group_0231,positive,0.5331,76.65
+482c82358461b546ed228c4ca5b0e928,Google News - Govt Scheme (English),english,group_0232,neutral,0.7908,50.0
+25056241288c34f461b3d7f4ec71a953,Google News - Govt Scheme (English),english,group_0233,neutral,0.8112,50.0
+e1c94e9141d5c3b6326f6e4d31b3c6f5,Google News - Govt Scheme (English),english,group_0234,neutral,0.5099,50.0
+568e2e178551ff644e33c03ffee9f91c,Google News - Govt Scheme (English),english,group_0235,neutral,0.5338,50.0
+75dd9408eebac7334a1a8f1697dffa0f,PIB via Google News,english,group_0236,positive,0.4461,72.3
+c8b2d7fd1a08d9a633a470c024341cc4,PIB via Google News,english,group_0237,neutral,0.6196,50.0
+444bc62d2edfd2ea3686332511aa7710,PIB via Google News,english,group_0238,neutral,0.873,50.0
+dd6cb877df25853560f5f5b532d39626,PIB via Google News,english,group_0239,neutral,0.8983,50.0
+cf84d3d9ebeeb127bdc14707ea6f98da,PIB via Google News,english,group_0240,neutral,0.4874,50.0
+38e62d47334cfb8d6555eafe4d5130cc,PIB via Google News,english,group_0241,neutral,0.5942,50.0
+e0c0d1e6da38312455b3e18fbabe9297,PIB via Google News,english,group_0242,neutral,0.8588,50.0
+d46b63089fcd5ca230e5670630ca959c,PIB via Google News,english,group_0243,neutral,0.9104,50.0
+7466231a1cadc44c2efd39e3279cadfc,PIB via Google News,english,group_0244,neutral,0.4532,50.0
+4d3157ba51a2450eb93112a6e206c9b5,PIB via Google News,english,group_0245,neutral,0.5229,50.0
+7f01f8d7a49b3ba94b78dbf6fb9fe417,PIB via Google News,english,group_0246,neutral,0.5046,50.0
+6d58da46a61f5dade89e158c4423085f,PIB via Google News,english,group_0247,neutral,0.8481,50.0
+cf7da975ac1a8d84fd24ccbb1b62a8c4,PIB via Google News,english,group_0248,positive,0.4668,73.34
+b75df19960c0159d2ea48fde4855ed45,PIB via Google News,english,group_0249,neutral,0.4893,50.0
+2485e12a1a62e52599a1a6024b25af94,PIB via Google News,english,group_0250,positive,0.565,78.25
+7e8536b63b0ebe99236fe6ad24c924c3,PIB via Google News,english,group_0251,neutral,0.5759,50.0
+69edf65d9c0641bbe68be26f1bafcb73,PIB via Google News,english,group_0252,neutral,0.5669,50.0
+ce5b1167d1d3dcc5a21d76b71d30c04b,PIB via Google News,english,group_0253,neutral,0.5294,50.0
+df59a1288745f8cc79e6d3b49c160de8,PIB via Google News,english,group_0254,neutral,0.6753,50.0
+95941e4245fb00fa5c650e04c9987185,PIB via Google News,english,group_0255,neutral,0.6755,50.0
+e88e2ac69be2f0386cbacc4bb4bde929,PIB via Google News,english,group_0256,neutral,0.4479,50.0
+90f134072efe127ee35047b2f5022596,PIB via Google News,english,group_0257,neutral,0.523,50.0
+7091e0ec459c010e76e69eca2e7d12b8,PIB via Google News,english,group_0258,neutral,0.6151,50.0
+b66a0c6908e10804489dd8f3a8c5cb78,PIB via Google News,english,group_0259,neutral,0.4232,50.0
+0c198816f82e913f1cd3c0bdd1249dd0,PIB via Google News,english,group_0260,neutral,0.5154,50.0
+c2b0628104cba132ca5ffc6193add06d,PIB via Google News,english,group_0261,neutral,0.6529,50.0
+64298473f0c7eb37bf9fa25011263b2c,PIB via Google News,english,group_0262,neutral,0.7159,50.0
+7e64a1173bca63b45b2c0ec90a815b0c,PIB via Google News,english,group_0263,neutral,0.8331,50.0
+25808515fc6bad2d9c05bfc79e954a56,PIB via Google News,english,group_0264,neutral,0.9185,50.0
+73519ddcb9f927d7157d8f9fcb0cd3dd,PIB via Google News,english,group_0265,neutral,0.7431,50.0
+99d573a0e8c0c1ddcd7eef57af1c7890,PIB via Google News,english,group_0266,neutral,0.9008,50.0
+7b7c683a2c115f6d2fd508bd18fba588,PIB via Google News,english,group_0267,neutral,0.5784,50.0
+72a5664e8501a750d95d41eabf93326e,PIB via Google News,english,group_0268,neutral,0.6632,50.0
+f6f32852616193c694b64c6c1f39ff18,PIB via Google News,english,group_0269,neutral,0.5153,50.0
+4977e627e0fd88d105f4097811ae59d2,PIB via Google News,english,group_0270,positive,0.6013,80.06
+92f3726be4749aa19c142cdf2c10dcb4,PIB via Google News,english,group_0271,neutral,0.6933,50.0
+67af3e3c956ed8a873656dba9a58bac1,PIB via Google News,english,group_0272,neutral,0.5066,50.0
+2ee53ff6b2809252813cf535d6f7a6b6,PIB via Google News,english,group_0273,neutral,0.7058,50.0
+99ee6aaaffbb8386c8d843cc3a0674b9,PIB via Google News,english,group_0274,neutral,0.9073,50.0
+9eb8d9e42ca5c7a4b465d98a0b9043b0,PIB via Google News,english,group_0275,neutral,0.8736,50.0
+3b9b72e13a9e766a0534cc769e480a23,PIB via Google News,english,group_0276,neutral,0.6164,50.0
+75fdd0eb2b800d37dd5830a431a21027,PIB via Google News,english,group_0277,neutral,0.8508,50.0
+ac5b0a14245c29cbd5bedcb74c58e878,PIB via Google News,english,group_0278,neutral,0.8116,50.0
+b8db78107ae20566b916bb546da47134,PIB via Google News,english,group_0279,neutral,0.6698,50.0
+c2748ccc00eb0e969c9c94a74bf39084,PIB via Google News,english,group_0280,negative,0.441,27.95
+9a6417c29b77fcce8e0b798fe852e2e6,PIB via Google News,english,group_0281,positive,0.4788,73.94
+3e5ce7ac1ce345ffb7bcb1bec40fd147,PIB via Google News,english,group_0282,neutral,0.4343,50.0
+73edc9cd378a4fdd5832d3e10f97a0c8,PIB via Google News,hinglish,group_0283,neutral,0.6138,50.0
+1ed7e4b3b2924c7993074cea16b7fbae,PIB via Google News,english,group_0284,positive,0.4732,73.66
+a3972d4f6ed83785c7ddad65016eba85,PIB via Google News,english,group_0285,neutral,0.5018,50.0
+85f8c327bfd58cbb7e2a8694c403c06b,PIB via Google News,hinglish,group_0286,neutral,0.5299,50.0
+d8a8516054d2bad7c29ab1af4df04e08,PIB via Google News,english,group_0287,positive,0.5353,76.76
+55291a3ecb27384721f784f25fe66473,PIB via Google News,english,group_0288,neutral,0.8776,50.0
+8b7882c9a20ef737ee37eb235a206ea5,PIB via Google News,english,group_0289,neutral,0.4887,50.0
+f98d65bd74f7f314c61053f6df20875a,PIB via Google News,english,group_0290,neutral,0.8131,50.0
+faaff857c3fd6810af591b6b22536866,PIB via Google News,english,group_0291,neutral,0.5083,50.0
+71e8720760bfbf3c3033b9e1cdd6b962,PIB via Google News,english,group_0292,positive,0.4757,73.78
+6aaddd599bcfa7bc83c59c94fb1f9703,PIB via Google News,english,group_0293,neutral,0.4498,50.0
+09671b3635b925d59d4e840b1fa181ca,PIB via Google News,english,group_0294,neutral,0.6562,50.0
+04d8a5873b3d0942fab6ec31c6aca70b,PIB via Google News,english,group_0295,neutral,0.7073,50.0
+354787884130cbb2c633a51e5641f1fc,PIB via Google News,english,group_0296,neutral,0.6393,50.0
+4e27da04fc0c2c1ebc2089aee24baa48,PIB via Google News,english,group_0297,neutral,0.8772,50.0
+fc60cc8e9b95a6f8f8e0f0ef03b9c6fb,PIB via Google News,english,group_0298,neutral,0.5223,50.0
+4145ae7b32fa8d49c10f2c0ee20e29bd,PIB via Google News,english,group_0299,neutral,0.7856,50.0
+af73fa663c09b3a620b77ff91174ea26,PIB via Google News,english,group_0300,neutral,0.5229,50.0
+815ba3cf02a1edd5544e964b2ab942d1,PIB via Google News,english,group_0301,neutral,0.4569,50.0
+669a2df2904f0a3d5e4ee1cb968647ef,PIB via Google News,english,group_0302,neutral,0.826,50.0
+52036a83f735b8a8e7c5f665a11352f0,PIB via Google News,english,group_0303,neutral,0.4238,50.0
+490534b2e7dfa999a570f92c61a2cfdd,PIB via Google News,english,group_0304,negative,0.6774,16.13
+58310113e571a53919313c56038608d3,PIB via Google News,english,group_0305,neutral,0.5534,50.0
+a05697c1cc99a349d8f1c219ad81aef4,PIB via Google News,english,group_0306,neutral,0.762,50.0
+1077ef45ad8448c849d945095cc5e67e,PIB via Google News,english,group_0307,positive,0.5571,77.85
+c9acefc87b4bcedd033b840756a8148c,PIB via Google News,english,group_0308,neutral,0.5478,50.0
+cf363e9474e593d8bcdd3ca5869b58e2,PIB via Google News,english,group_0309,positive,0.5081,75.41
+4f526bbb170e7d801d12f492b139c1f4,PIB via Google News,english,group_0310,neutral,0.7166,50.0
+e4241871570e66436005bb137922aa3b,PIB via Google News,english,group_0311,neutral,0.4697,50.0
+8824cd257cfe498bd40031ef0a49e3a0,PIB via Google News,english,group_0312,neutral,0.7644,50.0
+3061c120dcf6aa952f85b3a725ff7c75,PIB via Google News,english,group_0313,neutral,0.8782,50.0
+b5eef86533f22d346d11d3799cbd528f,PIB via Google News,english,group_0314,neutral,0.6442,50.0
+eb3328b61b6a4b04e42c235e3e9dec6f,PIB via Google News,english,group_0315,neutral,0.867,50.0
+e338fdbe2a7f8a8388fafca45e924783,PIB via Google News,english,group_0316,positive,0.6199,80.99
+0c8632c8210c6b7c0dd141ab6482a586,PIB via Google News,english,group_0317,neutral,0.4893,50.0
+c458a14aa466af2ce5ff515b74aa67f1,PIB via Google News,english,group_0318,neutral,0.6844,50.0
+6321c0972629e14a6ca01dcd233bd051,PIB via Google News,english,group_0319,neutral,0.4586,50.0
+66eef48f829b1aee28b812654fc63193,PIB via Google News,english,group_0320,neutral,0.7297,50.0
+864cdfa1bf5cf28bd8774dc0480b0f6d,PIB via Google News,english,group_0321,neutral,0.5456,50.0
+8e3ed2b1a52a7c0adb0b646f40f91f53,PIB via Google News,english,group_0322,neutral,0.8758,50.0
+3194a2c010fc307c755f4bb54599e616,India Today,english,group_0333,negative,0.4825,25.88
+77d3ba33d57c8cf8b422c3b3f0e24cdb,India Today,english,group_0376,neutral,0.4484,50.0
+ae532eaf122fe225cbfdfa5db42cd7fd,India Today,english,group_0378,neutral,0.67,50.0
+be1ea786e35a457a416368a9ccb69331,India Today,hindi,group_0436,negative,0.7229,13.86
+ca11c93f460848b693edce40bbfce6a1,India Today,hindi,group_0439,neutral,0.3624,50.0
+6a4aec8ff381756edc2559543d8dae76,India Today,hindi,group_0440,negative,0.7745,11.28
+b66e79faf3ef1ee7e940d72a31e81d31,India Today,hindi,group_0441,neutral,0.6366,50.0

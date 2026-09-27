@@ -47,12 +47,14 @@ python -m scraper.rss.run_rss_pipeline
 ```
 
 ### API (via FastAPI)
-```python
-# In backend/app/main.py, add:
-from scraper.rss.api import rss_router
-app.include_router(rss_router, prefix="/api/scraper")
+```bash
+# From the repository root:
+uvicorn backend.app.main:app --reload
 ```
-Then POST to `http://localhost:8000/api/scraper/rss/run`.
+The dashboard API reads the existing cleaned/NLP tables or CSV exports. See
+[`backend/README.md`](backend/README.md) for the read endpoints, configuration,
+and the model integration seam. The existing scraper trigger router can also
+be mounted separately when live scraping is needed.
 
 ## Known Limitations
 

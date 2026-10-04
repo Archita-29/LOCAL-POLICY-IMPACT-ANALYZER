@@ -52,9 +52,9 @@ class RedditSpider(scrapy.Spider):
                 mention['url'] = f"https://www.reddit.com{permalink}"
                 
                 if created_utc:
-                    mention['published_date'] = datetime.datetime.utcfromtimestamp(created_utc)
+                    mention['published_date'] = datetime.datetime.fromtimestamp(created_utc, tz=datetime.timezone.utc)
                 else:
-                    mention['published_date'] = datetime.datetime.utcnow()
+                    mention['published_date'] = datetime.datetime.now(datetime.timezone.utc)
                     
                 yield mention
         except Exception as e:

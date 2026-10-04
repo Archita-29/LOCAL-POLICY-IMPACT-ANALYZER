@@ -1,6 +1,7 @@
 import scrapy
 from local_policy_scraper.items import MentionItem
 import datetime
+from email.utils import parsedate_to_datetime
 
 class NewsMentionSpider(scrapy.Spider):
     name = 'news_mention_spider'
@@ -31,13 +32,12 @@ class NewsMentionSpider(scrapy.Spider):
             pub_date_str = item.xpath('pubDate/text()').get()
             source = item.xpath('source/text()').get()
 
-            pub_date = datetime.datetime.utcnow()
-            try:
-                if pub_date_str:
-                    # Example: Tue, 04 Jul 2023 07:00:00 GMT
-                    pub_date = datetime.datetime.strptime(pub_date_str, "%a, %d %b %Y %H:%M:%S %Z")
-            except Exception as e:
-                self.logger.warning(f"Could not parse date {pub_date_str}: {e}")
+            pub_date = datetime.datetime.now(datetime.timezone.utc)
+            if pub_date_str:
+                try:
+                    pub_date = parsedate_to_datetime(pub_date_str)
+                except Exception as e:
+                    self.logger.warning(f"Could not parse date {pub_date_str}: {e}")
 
             if title:
                 mention = MentionItem()

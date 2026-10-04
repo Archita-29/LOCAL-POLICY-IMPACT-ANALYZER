@@ -15,7 +15,7 @@ HOW MATCHING WORKS:
 
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from sqlalchemy import create_engine
@@ -89,6 +89,17 @@ def bridge_to_mentions(db_url: str | None = None) -> dict:
 
         scheme_name_map = {s.name: s for s in schemes}
 
+        # Pre-fetch existing mentions into sets for fast O(1) deduplication
+        existing_urls = {
+            (m.scheme_id, m.url.strip())
+            for m in session.query(Mention.scheme_id, Mention.url).filter(Mention.url.isnot(None)).all()
+            if m.url
+        }
+        existing_texts = {
+            (m.scheme_id, (m.raw_text or "").strip().lower())
+            for m in session.query(Mention.scheme_id, Mention.raw_text).all()
+        }
+
         cleaned_rows = (
             session.query(CleanedRecord)
             .filter(CleanedRecord.is_policy_relevant == 1)
@@ -119,17 +130,15 @@ def bridge_to_mentions(db_url: str | None = None) -> dict:
                 stats["skipped_no_match"] += 1
                 continue
 
-            # Check duplicate by URL
-            if row.link:
-                existing = (
-                    session.query(Mention)
-                    .filter(Mention.scheme_id == matched_scheme.id)
-                    .filter(Mention.url == row.link)
-                    .first()
-                )
-                if existing:
-                    stats["skipped_duplicate"] += 1
-                    continue
+            # In-memory deduplication check (URL or exact text match for this scheme)
+            row_link = (row.link or "").strip()
+            row_title = (row.title_clean or "").strip()
+            url_key = (matched_scheme.id, row_link) if row_link else None
+            text_key = (matched_scheme.id, row_title.lower())
+
+            if (url_key and url_key in existing_urls) or (text_key in existing_texts):
+                stats["skipped_duplicate"] += 1
+                continue
 
             # Determine sentiment
             sent_score = Decimal("0.0")
@@ -142,24 +151,27 @@ def bridge_to_mentions(db_url: str | None = None) -> dict:
             lang_map = {"hindi": "hi", "english": "en", "hinglish": "hi-en"}
             mention_lang = lang_map.get(row.language, "hi")
 
-            pub_dt = datetime.utcnow()
+            pub_dt = datetime.now(timezone.utc)
             if row.published_datetime:
                 try:
                     pub_dt = datetime.fromisoformat(row.published_datetime.replace("Z", "+00:00"))
                 except Exception:
-                    pub_dt = datetime.utcnow()
+                    pub_dt = datetime.now(timezone.utc)
 
             mention = Mention(
                 scheme_id=matched_scheme.id,
                 source=f"RSS: {row.source}" if row.source else "RSS",
-                raw_text=row.title_clean or "",
+                raw_text=row_title,
                 language=mention_lang,
                 sentiment_score=sent_score,
                 sentiment_label=sent_label,
                 published_date=pub_dt,
-                url=row.link,
+                url=row_link if row_link else None,
             )
             session.add(mention)
+            if url_key:
+                existing_urls.add(url_key)
+            existing_texts.add(text_key)
             stats["inserted"] += 1
 
         session.commit()
@@ -170,6 +182,7 @@ def bridge_to_mentions(db_url: str | None = None) -> dict:
         raise
     finally:
         session.close()
+        engine.dispose()
 
     return stats
 

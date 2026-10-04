@@ -30,6 +30,7 @@ import os
 from datetime import datetime, timezone
 
 import feedparser
+import requests
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -122,9 +123,26 @@ def run_rss_scrape(db_url: str | None = None) -> tuple[int, int]:
     skipped_duplicates = 0
 
     try:
+        # Pre-fetch existing record IDs into memory for O(1) duplicate checks
+        existing_ids = {r[0] for r in session.query(RawRecord.id).all()}
+
         for source_name, feed_url in RSS_FEEDS.items():
             print(f"Fetching: {source_name} ...")
-            feed = feedparser.parse(feed_url)
+            try:
+                resp = requests.get(
+                    feed_url,
+                    timeout=15,
+                    headers={"User-Agent": "Mozilla/5.0 (compatible; PolicyImpactAnalyzer/1.0; +https://github.com)"}
+                )
+                resp.raise_for_status()
+                feed = feedparser.parse(resp.content)
+            except Exception as req_err:
+                print(f"  Warning: HTTP fetch failed for {source_name} ({req_err}), attempting direct parse...")
+                try:
+                    feed = feedparser.parse(feed_url)
+                except Exception as parse_err:
+                    print(f"  Error: failed to parse {source_name}: {parse_err}")
+                    continue
 
             if feed.bozo and not feed.entries:
                 print(f"  Warning: could not cleanly parse {source_name} ({feed.bozo_exception})")
@@ -141,8 +159,7 @@ def run_rss_scrape(db_url: str | None = None) -> tuple[int, int]:
                 record_id = make_id(title, link)
 
                 # Check if this ID already exists (exact duplicate)
-                existing = session.query(RawRecord).filter(RawRecord.id == record_id).first()
-                if existing:
+                if record_id in existing_ids:
                     skipped_duplicates += 1
                     continue
 
@@ -159,6 +176,7 @@ def run_rss_scrape(db_url: str | None = None) -> tuple[int, int]:
                     scraped_at=datetime.now(timezone.utc).isoformat(),
                 )
                 session.add(record)
+                existing_ids.add(record_id)
                 new_count += 1
 
         session.commit()
@@ -167,6 +185,7 @@ def run_rss_scrape(db_url: str | None = None) -> tuple[int, int]:
         raise
     finally:
         session.close()
+        engine.dispose()
 
     print(f"\nDone. Inserted {new_count} new records. Skipped {skipped_duplicates} duplicates.")
     return new_count, skipped_duplicates
@@ -196,3 +215,4 @@ if __name__ == "__main__":
             print(f"  {source:35s} | {lang:10s} | {count} records")
     finally:
         session.close()
+        engine.dispose()

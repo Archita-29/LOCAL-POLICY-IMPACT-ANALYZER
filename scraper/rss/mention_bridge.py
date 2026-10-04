@@ -25,11 +25,16 @@ from sqlalchemy.orm import sessionmaker
 _this_dir = os.path.dirname(os.path.abspath(__file__))
 _repo_root = os.path.abspath(os.path.join(_this_dir, "..", ".."))
 _parent_root = os.path.abspath(os.path.join(_repo_root, ".."))
-_backend_path = os.path.join(_parent_root, "backend")
-_ml_path = os.path.join(_parent_root, "ml")
 
-for p in [_backend_path, _parent_root, _ml_path]:
-    if p not in sys.path:
+for p in [
+    os.path.join(_repo_root, "backend"),
+    os.path.join(_repo_root, "ml"),
+    _repo_root,
+    os.path.join(_parent_root, "backend"),
+    os.path.join(_parent_root, "ml"),
+    _parent_root,
+]:
+    if os.path.exists(p) and p not in sys.path:
         sys.path.insert(0, p)
 
 from scraper.rss.models import Base as RSSBase, CleanedRecord

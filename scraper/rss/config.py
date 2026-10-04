@@ -20,6 +20,13 @@ def get_database_url() -> str:
         return env_url
 
     this_dir = os.path.dirname(os.path.abspath(__file__))
+    local_backend_db = os.path.abspath(
+        os.path.join(this_dir, "..", "..", "backend", "policy_impact.db")
+    )
+    if os.path.exists(local_backend_db):
+        clean_path = local_backend_db.replace("\\", "/")
+        return f"sqlite:///{clean_path}"
+
     parent_backend_db = os.path.abspath(
         os.path.join(this_dir, "..", "..", "..", "backend", "policy_impact.db")
     )

@@ -311,6 +311,7 @@ def run_integration(db_url: str | None = None, csv_path: str | None = None):
         raise
     finally:
         session.close()
+        engine.dispose()
 
 
 if __name__ == "__main__":

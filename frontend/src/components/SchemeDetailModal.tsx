@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, ExternalLink, Activity, MessageSquare, HelpCircle } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { API_BASE } from '../api';
 
 interface ImpactScoreDetail {
   id: number;
@@ -38,7 +39,7 @@ export const SchemeDetailModal: React.FC<SchemeDetailProps> = ({ schemeId, onClo
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/schemes/${schemeId}`)
+    fetch(`${API_BASE}/api/schemes/${schemeId}`)
       .then(res => res.json())
       .then(data => {
         setDetail(data);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MessageSquare, Filter } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { API_BASE } from '../api';
 
 interface Mention {
   id: number;
@@ -29,7 +30,7 @@ export const SentimentFeed: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/schemes')
+    fetch(`${API_BASE}/api/schemes`)
       .then(res => res.json())
       .then(data => setSchemes(data))
       .catch(err => console.error('Error fetching schemes:', err));
@@ -37,7 +38,7 @@ export const SentimentFeed: React.FC = () => {
 
   const fetchMentions = () => {
     setLoading(true);
-    let url = 'http://localhost:8000/api/mentions';
+    let url = `${API_BASE}/api/mentions`;
     const params = new URLSearchParams();
     if (selectedScheme) params.append('scheme_id', selectedScheme);
     if (selectedSentiment) params.append('sentiment_label', selectedSentiment);

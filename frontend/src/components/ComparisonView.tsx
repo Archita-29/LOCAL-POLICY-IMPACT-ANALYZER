@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Scale, ArrowRightLeft } from 'lucide-react';
 import type { SchemeData } from './SchemeCard';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { API_BASE } from '../api';
 
 export const ComparisonView: React.FC = () => {
   const [schemes, setSchemes] = useState<SchemeData[]>([]);
@@ -12,7 +13,7 @@ export const ComparisonView: React.FC = () => {
   const [loadingChart, setLoadingChart] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/schemes')
+    fetch(`${API_BASE}/api/schemes`)
       .then(res => res.json())
       .then(data => {
         setSchemes(data);
@@ -28,14 +29,14 @@ export const ComparisonView: React.FC = () => {
     if (!scheme1Id || !scheme2Id) return;
 
     setLoadingChart(true);
-    fetch(`http://localhost:8000/api/comparison?scheme1_id=${scheme1Id}&scheme2_id=${scheme2Id}`)
+    fetch(`${API_BASE}/api/comparison?scheme1_id=${scheme1Id}&scheme2_id=${scheme2Id}`)
       .then(res => res.json())
       .then(data => setComparison(data))
       .catch(err => console.error('Error fetching comparison:', err));
 
     Promise.all([
-      fetch(`http://localhost:8000/api/schemes/${scheme1Id}`).then(res => res.json()),
-      fetch(`http://localhost:8000/api/schemes/${scheme2Id}`).then(res => res.json())
+      fetch(`${API_BASE}/api/schemes/${scheme1Id}`).then(res => res.json()),
+      fetch(`${API_BASE}/api/schemes/${scheme2Id}`).then(res => res.json())
     ])
       .then(([s1, s2]) => {
         const getAvgComponents = (scores: any[]) => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Popup, CircleMarker } from 'react-leaflet';
 import { Layers } from 'lucide-react';
+import { API_BASE } from '../api';
 
 interface RegionData {
   id: number;
@@ -20,11 +21,46 @@ interface SchemeOption {
   average_impact_score: number;
 }
 
-// Center coordinates for districts in Maharashtra
+// Center coordinates for districts across India
 const DISTRICT_COORDS: Record<string, [number, number]> = {
+  // Maharashtra districts
   Pune: [18.5204, 73.8567],
   Mumbai: [19.0760, 72.8777],
-  Nagpur: [21.1458, 79.0882]
+  Nagpur: [21.1458, 79.0882],
+  // All State & UT Capitals from seed_india
+  Amaravati: [16.5062, 80.6480],
+  Itanagar: [27.0844, 93.6053],
+  Dispur: [26.1433, 91.7898],
+  Patna: [25.5941, 85.1376],
+  Raipur: [21.2514, 81.6296],
+  Panaji: [15.4909, 73.8278],
+  Gandhinagar: [23.2156, 72.6369],
+  Chandigarh: [30.7333, 76.7794],
+  Shimla: [31.1048, 77.1734],
+  Ranchi: [23.3441, 85.3096],
+  Bengaluru: [12.9716, 77.5946],
+  Thiruvananthapuram: [8.5241, 76.9366],
+  Bhopal: [23.2599, 77.4126],
+  Imphal: [24.8170, 93.9368],
+  Shillong: [25.5788, 91.8933],
+  Aizawl: [23.7271, 92.7176],
+  Kohima: [25.6751, 94.1086],
+  Bhubaneswar: [20.2961, 85.8245],
+  Jaipur: [26.9124, 75.7873],
+  Gangtok: [27.3389, 88.6065],
+  Chennai: [13.0827, 80.2707],
+  Hyderabad: [17.3850, 78.4867],
+  Agartala: [23.8315, 91.2868],
+  Lucknow: [26.8467, 80.9462],
+  Dehradun: [30.3165, 78.0322],
+  Kolkata: [22.5726, 88.3639],
+  "Port Blair": [11.6234, 92.7265],
+  Daman: [20.3974, 72.8328],
+  "New Delhi": [28.6139, 77.2090],
+  Srinagar: [34.0837, 74.7973],
+  Leh: [34.1526, 77.5771],
+  Kavaratti: [10.5667, 72.6417],
+  Puducherry: [11.9416, 79.8083]
 };
 
 export const DistrictMap: React.FC = () => {
@@ -35,13 +71,13 @@ export const DistrictMap: React.FC = () => {
 
   useEffect(() => {
     // Fetch regions
-    fetch('http://localhost:8000/api/regions')
+    fetch(`${API_BASE}/api/regions`)
       .then(res => res.json())
       .then(data => setRegions(data))
       .catch(err => console.error('Error fetching regions:', err));
 
     // Fetch schemes
-    fetch('http://localhost:8000/api/schemes')
+    fetch(`${API_BASE}/api/schemes`)
       .then(res => res.json())
       .then(data => {
         setSchemes(data);
@@ -55,13 +91,15 @@ export const DistrictMap: React.FC = () => {
   useEffect(() => {
     if (!selectedSchemeId) return;
 
-    fetch(`http://localhost:8000/api/schemes/${selectedSchemeId}`)
+    fetch(`${API_BASE}/api/schemes/${selectedSchemeId}`)
       .then(res => res.json())
       .then(data => {
         const scoreMap: Record<number, any> = {};
-        data.impact_scores.forEach((iscore: any) => {
-          scoreMap[iscore.region_id] = iscore;
-        });
+        if (data.impact_scores) {
+          data.impact_scores.forEach((iscore: any) => {
+            scoreMap[iscore.region_id] = iscore;
+          });
+        }
         setRegionScores(scoreMap);
       })
       .catch(err => console.error('Error fetching scheme scores:', err));
@@ -81,7 +119,7 @@ export const DistrictMap: React.FC = () => {
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Layers color="#38bdf8" size={20} />
-            Maharashtra District Choropleth Map
+            District & Regional Impact Map
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
             Visualizing district-level Impact Scores (Estimated, Model-Generated)
@@ -115,8 +153,8 @@ export const DistrictMap: React.FC = () => {
 
       {/* Map Container */}
       <MapContainer
-        center={[19.25, 75.5]}
-        zoom={6}
+        center={[22.5, 79.5]}
+        zoom={5}
         scrollWheelZoom={false}
         style={{ height: '480px', width: '100%', borderRadius: '12px', overflow: 'hidden' }}
       >

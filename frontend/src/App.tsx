@@ -10,21 +10,31 @@ import { SentimentFeed } from './components/SentimentFeed';
 import { ModelDiagnostics } from './components/ModelDiagnostics';
 import { PolicySimulator } from './components/PolicySimulator';
 import { Search, Filter, RefreshCw, Layers } from 'lucide-react';
+import { API_BASE } from './api';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'schemes' | 'map' | 'comparison' | 'feed' | 'ml_details' | 'simulator'>('schemes');
   const [schemes, setSchemes] = useState<SchemeData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSchemeId, setSelectedSchemeId] = useState<number | null>(null);
   const [schemeLevel, setSchemeLevel] = useState<'state' | 'central'>('state');
 
+  // Debounce search query to prevent continuous network requests on keystrokes
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
   const fetchSchemes = () => {
     setLoading(true);
-    let url = 'http://localhost:8000/api/schemes';
+    let url = `${API_BASE}/api/schemes`;
     const params = new URLSearchParams();
-    if (searchQuery) params.append('search', searchQuery);
+    if (debouncedSearch) params.append('search', debouncedSearch);
     if (selectedCategory) params.append('category', selectedCategory);
     if (schemeLevel) params.append('level', schemeLevel);
     if (params.toString()) url += `?${params.toString()}`;
@@ -32,7 +42,7 @@ export const App: React.FC = () => {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        setSchemes(data);
+        setSchemes(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(err => {
@@ -43,7 +53,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, [searchQuery, selectedCategory, schemeLevel]);
+  }, [debouncedSearch, selectedCategory, schemeLevel]);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

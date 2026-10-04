@@ -297,7 +297,7 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
   const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
 
   // Only intercept our API calls
-  if (!url.includes('localhost:8000/api')) {
+  if (!url.includes('/api/')) {
     return originalFetch(input, init);
   }
 

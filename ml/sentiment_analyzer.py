@@ -209,6 +209,9 @@ def predict_sentiment(text: str) -> Dict[str, Any]:
     return analyzer.analyze(text)
 
 
+analyze_text = predict_sentiment
+
+
 if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding="utf-8")

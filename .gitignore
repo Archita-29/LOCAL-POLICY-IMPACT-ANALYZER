@@ -1,9 +1,56 @@
+# Virtual environments
 .venv/
+env/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+tempCodeRunnerFile.*
+
+# Databases & local runtime data
+*.db
+*.sqlite
+*.sqlite3
 policy_data.db
 policy_impact.db
-*.db
-tempCodeRunnerFile.python
-__pycache__/
-*.pyc
-*.py[cod]
-cleaned_policy_data.csv
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+dist-ssr/
+frontend/dist-ssr/
+*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Environment variables & secrets
+.env
+.env.*
+*.env
+
+# Prompts and non-essential plan documents
+*prompt*
+Problem Statement*
+PROJECT_SUMMARY.md

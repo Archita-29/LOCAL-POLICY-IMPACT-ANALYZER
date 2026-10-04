@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, selectinload
 from typing import List, Optional
 from sqlalchemy import func
 
@@ -24,7 +24,7 @@ def list_schemes(
     level: Optional[str] = Query(None, description="Filter by level: 'state' or 'central'"),
     db: Session = Depends(get_db)
 ):
-    query = db.query(Scheme)
+    query = db.query(Scheme).options(selectinload(Scheme.impact_scores))
     if search:
         query = query.filter((Scheme.name.ilike(f"%{search}%")) | (Scheme.description.ilike(f"%{search}%")))
     if category:
@@ -54,7 +54,9 @@ def list_schemes(
 
 @router.get("/schemes/{scheme_id}", response_model=SchemeDetailResponse)
 def get_scheme_detail(scheme_id: int, db: Session = Depends(get_db)):
-    scheme = db.query(Scheme).filter(Scheme.id == scheme_id).first()
+    scheme = db.query(Scheme).options(
+        selectinload(Scheme.impact_scores).joinedload(ImpactScore.region)
+    ).filter(Scheme.id == scheme_id).first()
     if not scheme:
         raise HTTPException(status_code=404, detail="Scheme not found")
     
@@ -62,15 +64,15 @@ def get_scheme_detail(scheme_id: int, db: Session = Depends(get_db)):
     scores = [float(iscore.score) for iscore in scheme.impact_scores]
     avg_score = sum(scores) / len(scores) if scores else None
 
-    # Format impact scores with district names
+    # Format impact scores using eager loaded region relationship (eliminates N+1 query)
     impact_score_responses = []
     for iscore in scheme.impact_scores:
-        region = db.query(Region).filter(Region.id == iscore.region_id).first()
+        district_name = iscore.region.district if iscore.region else "Unknown"
         score_resp = ImpactScoreResponse(
             id=iscore.id,
             scheme_id=iscore.scheme_id,
             region_id=iscore.region_id,
-            district_name=region.district if region else "Unknown",
+            district_name=district_name,
             score=float(iscore.score),
             reach_component=float(iscore.reach_component),
             sentiment_component=float(iscore.sentiment_component),
@@ -105,16 +107,16 @@ def list_regions(db: Session = Depends(get_db)):
 
 @router.get("/regions/{region_id}/schemes", response_model=List[ImpactScoreResponse])
 def get_region_scheme_scores(region_id: int, db: Session = Depends(get_db)):
-    scores = db.query(ImpactScore).filter(ImpactScore.region_id == region_id).all()
+    scores = db.query(ImpactScore).options(joinedload(ImpactScore.region)).filter(ImpactScore.region_id == region_id).all()
     results = []
     for iscore in scores:
-        region = db.query(Region).filter(Region.id == iscore.region_id).first()
+        district_name = iscore.region.district if iscore.region else "Unknown"
         results.append(
             ImpactScoreResponse(
                 id=iscore.id,
                 scheme_id=iscore.scheme_id,
                 region_id=iscore.region_id,
-                district_name=region.district if region else "Unknown",
+                district_name=district_name,
                 score=float(iscore.score),
                 reach_component=float(iscore.reach_component),
                 sentiment_component=float(iscore.sentiment_component),
@@ -129,8 +131,10 @@ def get_region_scheme_scores(region_id: int, db: Session = Depends(get_db)):
 
 @router.get("/mentions", response_model=List[MentionResponse])
 def list_mentions(
-    scheme_id: Optional[int] = None,
-    sentiment_label: Optional[str] = None,
+    scheme_id: Optional[int] = Query(None, description="Filter by scheme ID"),
+    sentiment_label: Optional[str] = Query(None, description="Filter by sentiment: Positive, Neutral, Negative"),
+    limit: int = Query(50, ge=1, le=500, description="Max number of mentions to return"),
+    offset: int = Query(0, ge=0, description="Number of mentions to skip"),
     db: Session = Depends(get_db)
 ):
     query = db.query(Mention)
@@ -139,14 +143,14 @@ def list_mentions(
     if sentiment_label:
         query = query.filter(Mention.sentiment_label == sentiment_label)
     
-    mentions = query.order_by(Mention.published_date.desc()).all()
+    mentions = query.order_by(Mention.published_date.desc()).offset(offset).limit(limit).all()
     return [MentionResponse.from_orm(m) for m in mentions]
 
 
 @router.get("/comparison")
 def compare_schemes(scheme1_id: int, scheme2_id: int, db: Session = Depends(get_db)):
-    s1 = db.query(Scheme).filter(Scheme.id == scheme1_id).first()
-    s2 = db.query(Scheme).filter(Scheme.id == scheme2_id).first()
+    s1 = db.query(Scheme).options(selectinload(Scheme.impact_scores)).filter(Scheme.id == scheme1_id).first()
+    s2 = db.query(Scheme).options(selectinload(Scheme.impact_scores)).filter(Scheme.id == scheme2_id).first()
 
     if not s1 or not s2:
         raise HTTPException(status_code=404, detail="One or both schemes not found")

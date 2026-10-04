@@ -24,7 +24,7 @@ class Scheme(Base):
     target_beneficiaries = Column(String(255), nullable=True)
     budget_allocated = Column(Numeric(15, 2), nullable=True)
     description = Column(Text, nullable=True)
-    source_url = Column(String(500), nullable=True)
+    source_url = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     # Relationships
@@ -73,7 +73,7 @@ class Mention(Base):
     sentiment_score = Column(Numeric(5, 4), nullable=True)  # -1.0 to 1.0
     sentiment_label = Column(String(20), nullable=True)  # Positive, Neutral, Negative
     published_date = Column(DateTime, default=datetime.datetime.utcnow)
-    url = Column(String(500), nullable=True)
+    url = Column(Text, nullable=True)
 
     # Relationships
     scheme = relationship("Scheme", back_populates="mentions")

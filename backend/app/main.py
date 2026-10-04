@@ -20,6 +20,13 @@ app.add_middleware(
 # Register API endpoints
 app.include_router(api_router, prefix="/api")
 
+# Register RSS scraper endpoints if available
+try:
+    from scraper.rss.api import rss_router
+    app.include_router(rss_router, prefix="/api/scraper")
+except ImportError:
+    pass
+
 @app.get("/")
 def read_root():
     return {

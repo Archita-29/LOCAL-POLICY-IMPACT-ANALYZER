@@ -1,6 +1,14 @@
-from fastapi import FastAPI
+from collections import Counter, defaultdict
+from typing import Any, Optional
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.api.endpoints import router as api_router
+
+try:
+    from app.data import data_status, load_records
+except ImportError:
+    from .data import data_status, load_records
 
 app = FastAPI(
     title="Local Policy Impact Analyzer API",
@@ -26,46 +34,6 @@ try:
     app.include_router(rss_router, prefix="/api/scraper")
 except ImportError:
     pass
-
-@app.get("/")
-def read_root():
-    return {
-        "message": "Welcome to the Local Policy Impact Analyzer API!",
-        "status": "healthy",
-        "docs_url": "/docs"
-"""FastAPI read API for Local Policy Impact Analyzer dashboard data."""
-
-from __future__ import annotations
-
-import os
-from collections import Counter, defaultdict
-from typing import Any
-
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
-
-from .data import data_status, load_records
-
-
-app = FastAPI(
-    title="Local Policy Impact Analyzer API",
-    version="1.0.0",
-    description=(
-        "Read endpoints for the scraper and NLP pipeline outputs. Scores are "
-        "reported only when present in persisted NLP results."
-    ),
-)
-
-# Set CORS_ORIGINS to a comma-separated list in deployment. Wildcard is useful
-# for local dashboard development; credentials are intentionally disabled.
-origins = [origin.strip() for origin in os.getenv("CORS_ORIGINS", "*").split(",") if origin.strip()]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins or ["*"],
-    allow_credentials=False,
-    allow_methods=["GET", "OPTIONS"],
-    allow_headers=["*"],
-)
 
 
 def _summary(records: list[dict[str, Any]]) -> dict[str, Any]:
@@ -95,8 +63,14 @@ def _summary(records: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 @app.get("/", tags=["System"])
-def root() -> dict[str, str]:
-    return {"name": "Local Policy Impact Analyzer API", "docs": "/docs", "health": "/health"}
+def read_root():
+    return {
+        "message": "Welcome to the Local Policy Impact Analyzer API!",
+        "name": "Local Policy Impact Analyzer API",
+        "status": "healthy",
+        "docs_url": "/docs",
+        "health": "/health"
+    }
 
 
 @app.get("/health", tags=["System"])
@@ -112,18 +86,18 @@ def dashboard_summary() -> dict[str, Any]:
 
 @app.get("/api/v1/records", tags=["Records"])
 def list_records(
-    q: str | None = Query(default=None, description="Search title and summary text"),
-    source: str | None = None,
-    language: str | None = None,
-    sentiment: str | None = None,
-    policy_relevant: bool | None = None,
+    q: Optional[str] = Query(default=None, description="Search title and summary text"),
+    source: Optional[str] = None,
+    language: Optional[str] = None,
+    sentiment: Optional[str] = None,
+    policy_relevant: Optional[bool] = None,
     scored_only: bool = False,
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
 ) -> dict[str, Any]:
     """List article records with optional filters and stable pagination."""
     rows = load_records()
-    if q:
+    if q and isinstance(q, str):
         term = q.casefold()
         rows = [
             r
@@ -131,11 +105,11 @@ def list_records(
             if term
             in f"{r.get('title_clean') or ''} {r.get('summary_clean') or ''}".casefold()
         ]
-    if source:
+    if source and isinstance(source, str):
         rows = [r for r in rows if (r.get("source") or "").casefold() == source.casefold()]
-    if language:
+    if language and isinstance(language, str):
         rows = [r for r in rows if (r.get("language") or "").casefold() == language.casefold()]
-    if sentiment:
+    if sentiment and isinstance(sentiment, str):
         rows = [r for r in rows if (r.get("sentiment_label") or "").casefold() == sentiment.casefold()]
     if policy_relevant is not None:
         rows = [r for r in rows if r.get("is_policy_relevant") is policy_relevant]

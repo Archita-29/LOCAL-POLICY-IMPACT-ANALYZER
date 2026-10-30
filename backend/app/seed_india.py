@@ -141,39 +141,97 @@ def seed_india():
                 )
                 db.add(mapping)
                 
-                # Add Mentions
-                m1 = Mention(
-                    scheme_id=s.id,
-                    source="News Portal",
-                    raw_text=f"The {s.name} in {state} is showing great progress this year.",
-                    language="en",
-                    sentiment_score=Decimal("0.8"),
-                    sentiment_label="Positive"
-                )
-                m2 = Mention(
-                    scheme_id=s.id,
-                    source="Twitter",
-                    raw_text=f"Still waiting for benefits from {s.name}. Administration in {state} is slow.",
-                    language="en",
-                    sentiment_score=Decimal("-0.6"),
-                    sentiment_label="Negative"
-                )
-                db.add_all([m1, m2])
+                # Add Dynamic Multi-Date Mentions
+                import random
+                rng = random.Random(s.id * 101 + 42)
+                base_date = datetime.datetime.now(datetime.timezone.utc)
                 
-                # Add Impact Score
+                cat_profiles = {
+                    "Agriculture": {"reach": (72, 88), "adoption": (68, 86)},
+                    "Health": {"reach": (76, 93), "adoption": (72, 90)},
+                    "Education": {"reach": (78, 95), "adoption": (75, 92)},
+                    "Welfare": {"reach": (70, 88), "adoption": (66, 85)},
+                    "Housing": {"reach": (58, 78), "adoption": (60, 80)},
+                    "Governance": {"reach": (62, 82), "adoption": (64, 82)},
+                }
+                prof = cat_profiles.get(sch.get("cat", "Welfare"), {"reach": (65, 85), "adoption": (65, 85)})
+                reach_val = float(rng.randint(prof["reach"][0], prof["reach"][1]))
+                adopt_val = float(rng.randint(prof["adoption"][0], prof["adoption"][1]))
+                
+                sources = ["PIB India", "Times of India", "Dainik Jagran", "The Hindu", "Twitter / X", "District Information Office"]
+                pos_texts = [
+                    f"Substantial distribution of benefits recorded under {s.name} in {state} with high citizen turnout.",
+                    f"Beneficiaries report seamless verification and timely disbursals for {s.name} in {state}.",
+                    f"Independent evaluation highlights over 85% target achievement under {s.name} in {state}."
+                ]
+                neu_texts = [
+                    f"State department reviews progress of {s.name}; administrative directives issued to expedite verification in {state}.",
+                    f"Enrollment drive for {s.name} ongoing across sub-divisional offices in {state}."
+                ]
+                neg_texts = [
+                    f"Beneficiaries in remote blocks report temporary delays in disbursement under {s.name} in {state}.",
+                    f"Citizens request simpler documentation criteria for {s.name} during regional grievance day in {state}."
+                ]
+                
+                sent_scores = []
+                mentions_to_add = []
+                day_offsets = sorted(rng.sample(range(1, 25), rng.randint(5, 7)), reverse=True)
+                for offset in day_offsets:
+                    mention_time = base_date - datetime.timedelta(days=offset, hours=rng.randint(1, 10))
+                    roll = rng.random()
+                    if roll < 0.60:
+                        lbl = "Positive"
+                        s_val = round(rng.uniform(0.55, 0.90), 2)
+                        txt = rng.choice(pos_texts)
+                    elif roll < 0.85:
+                        lbl = "Neutral"
+                        s_val = round(rng.uniform(-0.10, 0.20), 2)
+                        txt = rng.choice(neu_texts)
+                    else:
+                        lbl = "Negative"
+                        s_val = round(rng.uniform(-0.70, -0.30), 2)
+                        txt = rng.choice(neg_texts)
+                    
+                    m = Mention(
+                        scheme_id=s.id,
+                        source=rng.choice(sources),
+                        raw_text=txt,
+                        language="en",
+                        sentiment_score=Decimal(str(s_val)),
+                        sentiment_label=lbl,
+                        published_date=mention_time
+                    )
+                    mentions_to_add.append(m)
+                    sent_scores.append(s_val)
+                
+                db.add_all(mentions_to_add)
+                
+                # Compute Dynamic Grounded Impact Score
+                avg_sent = sum(sent_scores) / len(sent_scores) if sent_scores else 0.0
+                sent_component = round((avg_sent + 1.0) * 50.0, 2)
+                final_score = round((0.4 * reach_val) + (0.3 * sent_component) + (0.3 * adopt_val), 2)
+                
                 impact = ImpactScore(
                     scheme_id=s.id,
                     region_id=reg.id,
-                    score=Decimal("75.50"),
-                    reach_component=Decimal("70.00"),
-                    sentiment_component=Decimal("60.00"),
-                    adoption_component=Decimal("80.00"),
+                    score=Decimal(str(final_score)),
+                    reach_component=Decimal(str(round(reach_val, 2))),
+                    sentiment_component=Decimal(str(round(sent_component, 2))),
+                    adoption_component=Decimal(str(round(adopt_val, 2))),
                     shap_explanations={
-                        "features": {"reach_ratio": 0.7, "budget_utilization_ratio": 0.8, "average_sentiment": 0.1},
-                        "base_value": 50.0,
-                        "contributions": {"reach_ratio": 15.0, "budget_utilization_ratio": 10.0, "average_sentiment": 0.5}
+                        "base_value": 60.0,
+                        "features": {
+                            "reach_ratio": round(reach_val / 100.0, 3),
+                            "budget_utilization_ratio": round(adopt_val / 100.0, 3),
+                            "average_sentiment": round(avg_sent, 3)
+                        },
+                        "contributions": {
+                            "reach_level": round(reach_val - 60.0, 2),
+                            "budget_utilization": round(adopt_val - 60.0, 2),
+                            "sentiment_rating": round(sent_component - 50.0, 2)
+                        }
                     },
-                    model_version="v0_heuristic"
+                    model_version="v1_nlp_sentiment_heuristic"
                 )
                 db.add(impact)
 

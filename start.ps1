@@ -2,7 +2,8 @@
 Write-Host "Starting Local Policy Impact Analyzer..." -ForegroundColor Cyan
 
 # 1. Start FastAPI Backend in a separate window
-$backend = Start-Process pwsh -ArgumentList "-NoExit", "-Command", "`$env:PYTHONPATH='backend'; .venv\Scripts\python -m uvicorn app.main:app --port 8000 --reload" -PassThru
+$py = if (Test-Path ".venv\Scripts\python.exe") { ".venv\Scripts\python.exe" } elseif (Test-Path "..\.venv\Scripts\python.exe") { "..\.venv\Scripts\python.exe" } else { "python" }
+$backend = Start-Process pwsh -ArgumentList "-NoExit", "-Command", "`$env:PYTHONPATH='backend'; & '$py' -m uvicorn app.main:app --port 8000 --reload" -PassThru
 Write-Host "[OK] Backend running at http://localhost:8000 (PID: $($backend.Id))" -ForegroundColor Green
 
 # 2. Start React + Vite Frontend in a separate window
@@ -14,3 +15,4 @@ Start-Sleep -Seconds 2
 Start-Process "http://localhost:3000"
 
 Write-Host "`nReady! App: http://localhost:3000 | Swagger Docs: http://localhost:8000/docs" -ForegroundColor Yellow
+

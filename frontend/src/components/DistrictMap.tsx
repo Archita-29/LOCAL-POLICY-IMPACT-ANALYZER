@@ -73,16 +73,20 @@ export const DistrictMap: React.FC = () => {
     // Fetch regions
     fetch(`${API_BASE}/api/regions`)
       .then(res => res.json())
-      .then(data => setRegions(data))
+      .then(data => {
+        if (Array.isArray(data)) setRegions(data);
+      })
       .catch(err => console.error('Error fetching regions:', err));
 
     // Fetch schemes
     fetch(`${API_BASE}/api/schemes`)
       .then(res => res.json())
       .then(data => {
-        setSchemes(data);
-        if (data.length > 0) {
-          setSelectedSchemeId(data[0].id);
+        if (Array.isArray(data)) {
+          setSchemes(data);
+          if (data.length > 0) {
+            setSelectedSchemeId(data[0].id);
+          }
         }
       })
       .catch(err => console.error('Error fetching schemes:', err));
@@ -95,7 +99,7 @@ export const DistrictMap: React.FC = () => {
       .then(res => res.json())
       .then(data => {
         const scoreMap: Record<number, any> = {};
-        if (data.impact_scores) {
+        if (data && Array.isArray(data.impact_scores)) {
           data.impact_scores.forEach((iscore: any) => {
             scoreMap[iscore.region_id] = iscore;
           });
@@ -159,8 +163,8 @@ export const DistrictMap: React.FC = () => {
         style={{ height: '480px', width: '100%', borderRadius: '12px', overflow: 'hidden' }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         {regions.map(r => {

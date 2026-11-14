@@ -34,7 +34,7 @@ from app.core.database import Base as BackendBase
 from app.models.models import Scheme, Region, SchemeRegionMapping, Mention, ImpactScore
 from scraper.rss.models import Base as RSSBase, CleanedRecord
 from ml.sentiment_analyzer import predict_sentiment
-_default_db = os.path.join(_backend_path, "policy_impact.db").replace("\\", "/")
+_default_db = os.path.join(_proj_root, "policy_impact.db").replace("\\", "/")
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{_default_db}")
 
 # ---------------------------------------------------------------------------

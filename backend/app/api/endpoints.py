@@ -25,14 +25,15 @@ def list_schemes(
     db: Session = Depends(get_db)
 ):
     query = db.query(Scheme).options(selectinload(Scheme.impact_scores))
-    if search:
+    if search and isinstance(search, str):
         query = query.filter((Scheme.name.ilike(f"%{search}%")) | (Scheme.description.ilike(f"%{search}%")))
-    if category:
+    if category and isinstance(category, str):
         query = query.filter(Scheme.category == category)
-    if level == 'central':
-        query = query.filter(Scheme.launching_authority.ilike('%Government of India%'))
-    elif level == 'state':
-        query = query.filter(~Scheme.launching_authority.ilike('%Government of India%'))
+    if level and isinstance(level, str):
+        if level == 'central':
+            query = query.filter(Scheme.launching_authority.ilike('%Government of India%'))
+        elif level == 'state':
+            query = query.filter(~Scheme.launching_authority.ilike('%Government of India%'))
     
     schemes = query.all()
     results = []
@@ -138,12 +139,14 @@ def list_mentions(
     db: Session = Depends(get_db)
 ):
     query = db.query(Mention)
-    if scheme_id:
+    if scheme_id and isinstance(scheme_id, int):
         query = query.filter(Mention.scheme_id == scheme_id)
-    if sentiment_label:
+    if sentiment_label and isinstance(sentiment_label, str):
         query = query.filter(Mention.sentiment_label == sentiment_label)
     
-    mentions = query.order_by(Mention.published_date.desc()).offset(offset).limit(limit).all()
+    actual_limit = limit if isinstance(limit, int) else 50
+    actual_offset = offset if isinstance(offset, int) else 0
+    mentions = query.order_by(Mention.published_date.desc()).offset(actual_offset).limit(actual_limit).all()
     return [MentionResponse.from_orm(m) for m in mentions]
 
 

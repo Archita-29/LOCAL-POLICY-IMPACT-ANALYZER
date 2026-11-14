@@ -1,221 +1,281 @@
-# Local Policy Impact Analyzer
+# Local Policy Impact Analyzer 🇮🇳
 
-Local Policy Impact Analyzer collects public reporting about Indian
-government schemes and policies, organizes the material, and analyzes the
-sentiment expressed in those reports. The project is intended to help people
-explore public discussion and surface signals about policy implementation.
+> **A full-stack AI/ML analytics platform for monitoring, evaluating, and visualizing the ground-level public impact of Indian government welfare schemes and policies.**
 
-The current repository contains an RSS collection and cleaning pipeline,
-NLP processing scripts and sample exports, plus a FastAPI read API for a
-dashboard. It does **not** currently contain a web frontend.
+---
 
-> **Interpretation:** Online posts and news coverage are signals about public
-> discussion, not a direct measurement of whether a scheme reached its
-> beneficiaries or achieved its goals. Sentiment scores should not be treated
-> as an official or unbiased audit. Platform access, language, geography,
-> demographics, source quality, and coordinated activity can all affect what
-> the collected data represents.
+## 📌 Executive Summary
 
-## What the project does
+Government welfare programs disburse trillions of rupees annually, yet measuring their ground-level reach, citizen sentiment, and implementation hurdles across diverse districts remains challenging. 
 
-1. Collects articles from configured RSS feeds.
-2. Cleans text, normalizes dates, estimates language, groups similar headlines,
-   and flags likely policy relevance.
-3. Exports records for NLP processing.
-4. Stores sentiment labels and impact scores produced by NLP processing.
-5. Serves the saved records and summaries through a REST API for a dashboard.
+The **Local Policy Impact Analyzer** addresses this by combining **multi-source automated web & news scraping**, **multilingual NLP sentiment analysis (Hindi, Hinglish, English)**, and **interpretable machine learning (SHAP)** with an **interactive geospatial dashboard**. It empowers citizens, policymakers, and NGOs to observe policy perception, compare regional adoption, and inspect feature-level explainability.
 
-The intended next stage is to associate each article with a stable government
-scheme identifier, then aggregate results by scheme. The current CSV exports
-do not contain that association, so the API reports article-level results and
-source-level aggregates instead of claiming scheme-level impact.
+Designed with an on-device, local-first philosophy, the platform supports local inference with low latency, privacy preservation, and future hardware acceleration on Snapdragon / Windows on ARM platforms (via ONNX Runtime, DirectML, and QNN).
 
-## Repository contents
+---
 
-| Path | Purpose |
-|---|---|
-| `scraper/rss/rss_pipeline.py` | Refactored RSS collector using SQLAlchemy |
-| `scraper/rss/integration.py` | Refactored cleaner and record flagger |
-| `scraper/rss/mention_bridge.py` | Optional integration with a separate backend's Scheme and Mention models |
-| `scraper/rss/sentiment.py` | Current lexicon-based multilingual sentiment helper |
-| `scraper/rss/api.py` | Optional endpoint to trigger the refactored RSS pipeline |
-| `rss_pipeline.py` | Original standalone RSS collector using SQLite |
-| `integration.py` | Original standalone cleaning and export script |
-| `export_nlp_ready.py` | Builds an NLP-ready SQLite table and CSV from `cleaned_records` |
-| `nlp_processor.py` | Loads the XLM-RoBERTa sentiment model and saves NLP outputs |
-| `cleaned_policy_data.csv` | Cleaned article records with relevance and duplicate flags |
-| `nlp_ready_data.csv` | Filtered records prepared for NLP |
-| `nlp_policy_impact_results.csv` | Sample/persisted sentiment and impact results |
-| `backend/app/` | FastAPI read API and future model-provider interface |
-| `import_schemes.py` | Optional importer for an external `updated_data.csv` file |
+## 🏗️ System Architecture
 
-## Requirements
+```mermaid
+flowchart TD
+    subgraph DataIngestion ["1. Data Ingestion & Crawlers"]
+        A1["RSS Feeds (PIB, BBC Hindi, India Today)"] --> B1["RSS Cleaning & Dedup Pipeline"]
+        A2["Scrapy Spiders (MahaDBT, News, Reddit)"] --> B1
+        B1 --> B2["Cleaned Records & Mention Bridge"]
+    end
 
-- Python 3.10 or newer is recommended.
-- Internet access is needed to fetch live RSS feeds and download the NLP model
-  on its first run.
-- The `requirements.txt` file includes the API, scraper, data-processing, and
-  NLP packages. PyTorch and Transformers can require a large download.
+    subgraph ML_NLP ["2. Multilingual NLP & ML Engine"]
+        B2 --> C1["Multilingual Sentiment (XLM-RoBERTa / Lexicon)"]
+        C1 --> C2["Impact Scoring Engine (Reach, Sentiment, Adoption)"]
+        C2 --> C3["SHAP Feature Explainability"]
+    end
 
-## Setup
+    subgraph BackendStorage ["3. Backend API & Storage"]
+        C2 --> D1[("SQLite / PostgreSQL + PostGIS")]
+        D1 --> D2["FastAPI REST Service (/api, /api/v1)"]
+        D2 --> D3["Celery & Redis Worker Tasks"]
+    end
 
-Run these commands from the repository root:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+    subgraph FrontendUI ["4. React Analytics Dashboard"]
+        D2 --> E1["District Choropleth Map (Leaflet)"]
+        D2 --> E2["Scheme Explorer & Search"]
+        D2 --> E3["Scheme Detail Modal & SHAP Chart"]
+        D2 --> E4["NGO Comparison View"]
+        D2 --> E5["Policy Simulator & Model Diagnostics"]
+    end
 ```
 
-On Windows PowerShell, activate the environment with:
+---
+
+## ✨ Key Features
+
+### 1. Interactive React Dashboard (`frontend/`)
+* **District Choropleth Map**: Geospatial visualization powered by Leaflet & OpenStreetMap displaying district-level policy impact scores across Maharashtra and India.
+* **Scheme Explorer**: Real-time search and filtering across categories (Agriculture, Education, Social Welfare) and jurisdiction levels (Central vs. State).
+* **SHAP Explainability Modal**: Transparent breakdowns showing the exact contribution of Reach, Sentiment, and Budget Adoption to any scheme's score.
+* **NGO Comparison View**: Side-by-side comparison tool enabling policy analysts and NGOs to contrast schemes by budget, reach, and composite impact.
+* **Policy Simulator & Diagnostics**: Interactive controls to simulate hypothetical policy adjustments and inspect model performance metrics.
+* **Transparency Banner**: Clear indicators that scores are model-assisted estimates.
+
+### 2. FastAPI Backend Service (`backend/`)
+* **RESTful Endpoints**: Full CRUD and analytical endpoints covering schemes, regions, mentions, and comparisons.
+* **Dual Database Support**: Seamless fallback to SQLite (`policy_impact.db`) for rapid local development or PostgreSQL/PostGIS in production.
+* **Eager Relationship Loading**: Optimized SQLAlchemy queries eliminating N+1 overhead on nested relationships.
+* **Interactive Documentation**: OpenAPI Swagger UI available out-of-the-box at `/docs`.
+
+### 3. Data Collection & RSS Pipeline (`scraper/`)
+* **Multi-Source Crawlers**: Scrapy spiders targeting government portals (MahaDBT), regional news portals, and community forums (Reddit).
+* **Automated RSS Pipeline**: Feedparser-based collector ingesting feeds from PIB, BBC Hindi, India Today, and Navbharat Times.
+* **Data Hygiene Engine**: Text sanitization, date normalization, language identification (Hindi, Hinglish, English), near-deduplication (threshold ≥ 0.85), and policy relevance filtering.
+* **Mention Bridge**: Bridges raw and cleaned news mentions directly into database `Mention` and `Scheme` tables.
+
+### 4. Multilingual NLP & Impact Scoring (`ml/`)
+* **Multilingual Sentiment**: Hugging Face Transformer inference (`cardiffnlp/twitter-xlm-roberta-base-sentiment` / MuRIL) and lexicon analyzers tuned for Indian regional context and Hinglish colloquialisms.
+* **Composite Impact Score Model**:
+  $$\text{Impact Score} = 0.4 \times \text{Reach} + 0.3 \times \text{Sentiment} + 0.3 \times \text{Adoption}$$
+* **Explainable AI (XAI)**: SHAP value contributions decomposing each score into interpretable positive and negative factors.
+
+---
+
+## 📂 Repository Structure
+
+```
+local-policy-impact-analyzer/
+├── backend/                        # FastAPI REST API Backend
+│   ├── app/
+│   │   ├── api/endpoints.py        # Core API routers (/api/schemes, /api/regions, etc.)
+│   │   ├── core/                   # Configuration & database engine setup
+│   │   ├── models/models.py        # SQLAlchemy ORM models (Scheme, Region, Mention, ImpactScore)
+│   │   ├── schemas/schemas.py      # Pydantic v2 validation models
+│   │   ├── tasks/celery_app.py     # Celery background workers
+│   │   ├── main.py                 # FastAPI application factory & CORS setup
+│   │   ├── model_provider.py       # ML model provider seam
+│   │   ├── seed.py                 # Maharashtra baseline seeder
+│   │   └── seed_india.py           # Pan-India expanded district seeder
+│   ├── requirements.txt            # Backend dependencies
+│   └── Dockerfile                  # Backend container build
+│
+├── frontend/                       # React 19 + TypeScript + Vite Dashboard
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── DistrictMap.tsx     # Leaflet Choropleth map with district score coloring
+│   │   │   ├── SchemeCard.tsx      # Individual scheme metrics card
+│   │   │   ├── SchemeDetailModal.tsx # SHAP breakdown and recent sentiment feed
+│   │   │   ├── ComparisonView.tsx  # NGO side-by-side scheme comparison
+│   │   │   ├── PolicySimulator.tsx # What-if scenario simulator
+│   │   │   ├── ModelDiagnostics.tsx# Model health and error metrics
+│   │   │   └── DisclaimerBanner.tsx# Ethics & transparency disclaimer
+│   │   ├── App.tsx                 # Main dashboard UI layout
+│   │   └── api.ts                  # Axios/Fetch client with fallback data
+│   ├── package.json
+│   └── vite.config.ts
+│
+├── ml/                             # Machine Learning & Sentiment Processing
+│   ├── analyze_and_populate.py     # Batch sentiment & SHAP computation runner
+│   ├── sentiment_analyzer.py       # Multilingual sentiment scoring module
+│   └── requirements.txt
+│
+├── scraper/                        # Web Scraping & Ingestion
+│   ├── local_policy_scraper/       # Scrapy project (MahaDBT, News, Reddit)
+│   ├── rss/                        # Refactored SQLAlchemy RSS pipeline
+│   │   ├── rss_pipeline.py         # Feedparser RSS collector
+│   │   ├── integration.py          # Cleaner, deduplicator & relevance flagger
+│   │   ├── mention_bridge.py       # Bridge to backend DB tables
+│   │   └── sentiment.py            # Lexicon sentiment helper
+│   └── scrapy.cfg
+│
+├── cleaned_policy_data.csv         # Cleaned articles with duplicate & relevance flags
+├── nlp_ready_data.csv              # Filtered dataset ready for NLP inference
+├── nlp_policy_impact_results.csv   # Persisted sentiment & impact score results
+├── nlp_processor.py                # Standalone XLM-RoBERTa sentiment processor
+├── docker-compose.yml              # PostgreSQL/PostGIS, Redis, Celery orchestration
+├── start.ps1                       # One-click Windows PowerShell dev launcher
+└── requirements.txt                # Unified root Python dependencies
+```
+
+---
+
+## 🚀 Quick Start Guide
+
+### Prerequisites
+* **Python**: 3.10 or newer
+* **Node.js**: 18.0 or newer (with npm)
+* **Git**
+
+---
+
+### Option A: One-Click Startup (Windows PowerShell)
+
+Run the included startup script from the project root:
 
 ```powershell
+.\start.ps1
+```
+
+This automatically:
+1. Detects your virtual environment (`.venv`).
+2. Launches the **FastAPI Backend** on `http://localhost:8000`.
+3. Launches the **React Dashboard** on `http://localhost:3000`.
+4. Opens your default web browser directly to the dashboard.
+
+---
+
+### Option B: Manual Setup
+
+#### 1. Backend Setup
+```bash
+# From repository root:
+python -m venv .venv
+
+# Activate virtual environment:
+# On Windows (PowerShell):
 .venv\Scripts\Activate.ps1
+# On Linux/macOS:
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# (Optional) Seed the database with sample schemes and districts
+python -m backend.app.seed
+
+# Start the FastAPI server
+python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-## Start the API
+* Backend Health Check: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+* Swagger Interactive Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-With the virtual environment active, from the repository root run:
+#### 2. Frontend Setup
+```bash
+# Open a new terminal and navigate to frontend:
+cd frontend
+
+# Install Node dependencies
+npm install
+
+# Start Vite dev server
+npm run dev -- --port 3000
+```
+
+* Dashboard UI: [http://localhost:3000](http://localhost:3000)
+
+---
+
+### Option C: Multi-Container Docker Deployment
+
+To launch the full production stack including PostgreSQL/PostGIS, Redis, Celery, and MLflow:
 
 ```bash
-uvicorn backend.app.main:app --reload
+docker-compose up -d
 ```
 
-Then open:
+---
 
-- API documentation: <http://127.0.0.1:8000/docs>
-- Health status: <http://127.0.0.1:8000/health>
-- Dashboard summary: <http://127.0.0.1:8000/api/v1/dashboard/summary>
-
-The API reads available records from SQLite and supplements them with the
-repository's CSV exports. It does not trigger scraping or run model inference
-when a dashboard request arrives. If no database exists, the checked-in CSV
-files can still provide data.
-
-By default, the API looks for `policy_impact.db`. The original root-level
-scripts write to `policy_data.db`; to make the API read that database, set
-this before starting Uvicorn:
-
-```bash
-export POLICY_ANALYZER_DB="$PWD/policy_data.db"
-uvicorn backend.app.main:app --reload
-```
-
-Alternatively, set `DATABASE_URL` to a `sqlite:///...` URL. The API currently
-supports SQLite data sources.
-
-### API endpoints
+## 📡 API Reference
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/health` | API and data-source status |
-| `GET` | `/api/v1/dashboard/summary` | Record counts, sentiment counts, and average scores |
-| `GET` | `/api/v1/records` | Search and filter article records with pagination |
-| `GET` | `/api/v1/records/{record_id}` | Fetch one record by its ID |
-| `GET` | `/api/v1/impact` | Persisted article-score aggregates by source |
+| `GET` | `/health` | Health status and database connectivity |
+| `GET` | `/api/schemes` | List schemes with search, category filters, and average impact scores |
+| `GET` | `/api/schemes/{id}` | Scheme details, regional impact scores, SHAP contributions, and recent mentions |
+| `POST` | `/api/schemes` | Register a new scheme and initialize regional baseline scores |
+| `GET` | `/api/regions` | District list with demographic data and GeoJSON coordinates |
+| `GET` | `/api/regions/{id}/schemes` | Impact scores across all schemes for a specific district |
+| `GET` | `/api/comparison` | Side-by-side comparison of two schemes |
+| `GET` | `/api/mentions` | Filtered list of scraped public mentions with sentiment labels |
+| `POST` | `/api/mentions` | Ingest a new mention and dynamically recalculate scheme impact scores |
+| `GET` | `/api/v1/dashboard/summary` | Aggregate dashboard summary (sentiment counts, source scores) |
+| `GET` | `/api/v1/records` | Paginated raw article records with full-text search |
 
-`/api/v1/records` accepts `q`, `source`, `language`, `sentiment`,
-`policy_relevant`, `scored_only`, `limit`, and `offset` query parameters. For
-example:
+---
 
-```bash
-curl "http://127.0.0.1:8000/api/v1/records?language=hindi&scored_only=true&limit=20"
-```
+## 🔄 Running the Scrapers & NLP Pipeline
 
-For local dashboard development, CORS allows requests from any origin by
-default. Set `CORS_ORIGINS` to a comma-separated list of allowed dashboard
-origins when deploying.
-
-## Data pipeline
-
-### Scrape and clean
-
-The refactored pipeline can be run from the repository root:
-
-```bash
+### 1. Ingest RSS Feeds & Clean
+```powershell
+# Ingest feeds from PIB, BBC Hindi, India Today
 python -m scraper.rss.rss_pipeline
+
+# Clean text, detect language, deduplicate and flag relevance
 python -m scraper.rss.integration
+
+# Bridge cleaned records into backend Mention & Scheme tables
+python -m scraper.rss.run_rss_pipeline
 ```
 
-It collects into `raw_records`, then creates or updates `cleaned_records`.
-Near duplicates and likely off-topic records are retained with flags; they are
-not discarded by the cleaner. The refactored modules use SQLAlchemy and
-`scraper/rss/config.py` to select a database. Set `DATABASE_URL` to a
-SQLAlchemy database URL to choose the database explicitly; otherwise the
-default SQLite file is `policy_impact.db` in the current working directory.
-
-To build NLP-ready records from the refactored database, use the Python
-function `build_nlp_ready_table()` in `export_nlp_ready.py` after configuring
-that script for the same database. The root-level export script currently
-uses `policy_data.db` directly, so its database path must be aligned before
-mixing it with the refactored pipeline.
-
-### Original standalone scripts
-
-The original scripts use a separate SQLite database named `policy_data.db` in
-the current working directory:
-
-```bash
-python rss_pipeline.py
-python integration.py
-python export_nlp_ready.py
+### 2. Run NLP Sentiment & Impact Scoring
+```powershell
+# Run XLM-RoBERTa transformer inference and export scores
 python nlp_processor.py
+
+# Or run the batch ML analyzer and populate the database
+python -m ml.analyze_and_populate
 ```
 
-`nlp_processor.py` downloads/loads
-`cardiffnlp/twitter-xlm-roberta-base-sentiment` and writes
-`nlp_processed_records` to `policy_data.db`, as well as
-`nlp_policy_impact_results.csv`. Its input table must already exist; run the
-scrape, clean, and export steps first. The model can take time and disk space
-to download.
+---
 
-> The refactored `scraper/rss/run_rss_pipeline.py` also calls
-> `mention_bridge.py`, which imports `Scheme`, `Mention`, and `ImpactScore`
-> models from a separate `backend` project expected next to this repository.
-> That external project is not included here, so the full scrape-clean-bridge
-> command is not standalone until those dependencies are provided. The FastAPI
-> read API documented above does not depend on that bridge.
+## ⚖️ Interpretation & Transparency Disclaimer
 
-## Data fields and score meaning
+> **Notice:** The impact scores generated by this platform are **model-assisted statistical estimates** combining online public discourse, reported sentiment, and published scheme metrics. 
+> 
+> Online discussions represent public sentiment signals and do not constitute an official or exhaustive audit of whether a scheme reached individual beneficiaries. Factors such as regional digital literacy, linguistic nuances, internet access distribution, and news editorial bias can influence sentiment feeds. These scores are designed to assist researchers and policymakers in prioritizing ground evaluations, not to replace official governmental audits.
 
-Cleaned records include fields such as `id`, `source`, `title_clean`,
-`summary_clean`, `link`, `published_datetime`, `language`, `story_group_id`,
-`is_near_duplicate`, and `is_policy_relevant`.
+---
 
-NLP output includes `id`, `source`, `language`, `story_group_id`,
-`sentiment_label`, `sentiment_score`, and `impact_score`. In the current NLP
-processor, `impact_score` maps model sentiment confidence onto a 0–100 scale
-centered around 50. It is a derived article sentiment measure; it is not a
-validated measure of program effectiveness or beneficiary outcomes.
+## 🛠️ Technology Stack
 
-The model-provider interface is in `backend/app/model_provider.py`. The API
-currently serves saved NLP outputs and does not call this interface. When a
-trained model is ready, connect it through this seam and persist its output
-under the existing record IDs. Missing model results should remain unscored.
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Leaflet, Lucide Icons, Recharts |
+| **Backend** | FastAPI, Pydantic v2, SQLAlchemy 2.0, Uvicorn |
+| **Databases** | SQLite (development) / PostgreSQL with PostGIS (production) |
+| **NLP & ML** | Hugging Face Transformers (`XLM-RoBERTa`), PyTorch, SHAP, NumPy, Pandas |
+| **Crawling** | Scrapy, Feedparser, BeautifulSoup4, Requests |
+| **DevOps & Async** | Docker, Docker Compose, Celery, Redis, MLflow |
 
-## Current limitations and next steps
+---
 
-- **No frontend is included.** Build a dashboard separately and connect it to
-  the API endpoints above.
-- **No stable scheme-to-article mapping is present in the supplied exports.**
-  Add a scheme ID and matching evidence to the pipeline before presenting
-  scheme-level aggregates.
-- **Online coverage is not representative of all citizens.** RSS feeds do not
-  cover every social network or community, and the current collector does not
-  provide a complete cross-platform view of public opinion.
-- **The root and refactored pipelines use different database conventions.**
-  Align the database URL/path when moving records between them.
-- **The older scheme importer expects `updated_data.csv`.** That input file is
-  not included in this repository.
-- **The separate backend models needed by `mention_bridge.py` are absent.**
-  The bridge needs that project before it can run end-to-end.
+## 📄 License
 
-Useful follow-up work is to define a canonical scheme catalog and record
-matching schema, persist source and matching evidence, evaluate sentiment
-quality across languages, and build a frontend that clearly communicates
-coverage and uncertainty.
-
-## License
-
-See [LICENSE](LICENSE).
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
